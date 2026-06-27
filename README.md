@@ -11,6 +11,8 @@
 | 🦸 Marvel / DC | คอมิก หนัง/ซีรีส์ซูเปอร์ฮีโร่ |
 | 📖 Manga / Anime | ข่าวมังงะ & อนิเมะ |
 
+> **🌐 Live:** https://halahussy.github.io/morning-news/ — อัปเดตอัตโนมัติทุกเช้า 06:00 น. (เวลาไทย)
+>
 > สถานะปัจจุบัน: **MVP — ดึงข่าว + ลิงก์ต้นฉบับ** (ยังไม่เปิด AI แปล/สรุป)
 > โครงสร้างข้อมูลเผื่อช่อง `translatedTitle` / `summary` / `insight` ไว้แล้ว พร้อมเสียบ AI ทีหลัง
 
@@ -77,9 +79,10 @@ NEWS/
 
 ## โรดแมปต่อไป
 
-1. **ขึ้น online ฟรี** — host หน้าเว็บบน GitHub Pages / Cloudflare Pages และใช้
-   GitHub Actions เป็น cron รัน `npm run fetch` อัตโนมัติทุกเช้า commit `news.json`
-   กลับเข้า repo → เปิดเว็บจากมือถือ/ที่ไหนก็ได้โดยไม่ต้องรันเอง (ฟรีทั้งหมด)
+1. ✅ **ขึ้น online ฟรี (เสร็จแล้ว)** — host บน GitHub Pages + GitHub Actions เป็น cron
+   ดึงข่าว `npm run fetch` อัตโนมัติทุกเช้า 06:00 น. (เวลาไทย) แล้ว publish ใหม่
+   เปิดจากมือถือ/ที่ไหนก็ได้ที่ https://halahussy.github.io/morning-news/ (ฟรีทั้งหมด)
+   — กดดึงเองได้จากแท็บ **Actions → Build & deploy dashboard → Run workflow**
 2. **เสียบ AI (Claude API)** — เพิ่มขั้นตอนหลัง fetch: แปลพาดหัวเป็นไทย, สรุปย่อ
    2–3 บรรทัด, และดึง "insight ที่เกี่ยวกับ background ของคุณ" ลงในฟิลด์
    `translatedTitle` / `summary` / `insight` ที่เตรียมไว้แล้ว หน้าเว็บจะแสดงให้เอง
