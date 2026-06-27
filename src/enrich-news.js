@@ -20,9 +20,11 @@ const NEWS_FILE = join(__dirname, '..', 'data', 'news.json');
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL_CANDIDATES = [
   process.env.GEMINI_MODEL,
+  'gemini-2.0-flash-lite',
   'gemini-2.0-flash',
-  'gemini-2.5-flash',
   'gemini-1.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash',
 ].filter(Boolean);
 const PREV_DATA_URL =
   process.env.SITE_DATA_URL || 'https://halahussy.github.io/morning-news/data/news.json';
@@ -39,6 +41,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let workingModel = null;
 let lastError = null;
+const modelAttempts = [];
 
 async function callGemini(model, prompt) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
@@ -110,11 +113,14 @@ async function enrichBatch(items) {
     try {
       const out = await callGemini(m, prompt);
       workingModel = m;
+      modelAttempts.push({ model: m, ok: true });
       console.log(`Using Gemini model: ${m}`);
       return out;
     } catch (e) {
       lastErr = e;
-      if (e.status === 404 || e.status === 400) continue; // model unavailable -> try next
+      modelAttempts.push({ model: m, status: e.status || 0, msg: (e.message || '').replace(/\s+/g, ' ').slice(0, 90) });
+      // model unavailable / no free quota for it -> try the next candidate
+      if ([400, 404, 429].includes(e.status)) continue;
       throw e;
     }
   }
@@ -218,6 +224,7 @@ async function main() {
     keyPrefix: API_KEY ? API_KEY.slice(0, 3) : null,
     keyLen: API_KEY ? API_KEY.length : 0,
     modelsTried: MODEL_CANDIDATES,
+    modelAttempts,
     lastError,
   };
 
