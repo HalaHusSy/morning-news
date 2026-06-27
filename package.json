@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "fetch": "node src/fetch-news.js",
+    "enrich": "node src/enrich-news.js",
+    "build": "node src/fetch-news.js && node src/enrich-news.js",
     "serve": "node serve.js",
     "start": "node serve.js",
-    "dev": "node src/fetch-news.js && node serve.js"
+    "dev": "node src/fetch-news.js && node src/enrich-news.js && node serve.js"
   },
   "dependencies": {
     "rss-parser": "^3.13.0"

@@ -41,6 +41,11 @@ jobs:
       - name: Fetch latest news
         run: npm run fetch
 
+      - name: AI enrich (Thai translate + summary + insight)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npm run enrich
+
       - name: Assemble static site
         run: |
           mkdir -p _site/data

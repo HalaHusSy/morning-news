@@ -226,6 +226,37 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+.card-title-orig {
+  margin: -3px 0 0;
+  font-size: .78rem;
+  color: var(--text-faint);
+  line-height: 1.35;
+}
+.card-summary {
+  margin: 0;
+  font-size: .86rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.card-insight {
+  margin: 0;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: #cdd6e4;
+  background: var(--th-bg);
+  border-radius: 8px;
+  padding: 7px 9px;
+}
+.card-insight span { margin-right: 2px; }
+.ai-badge {
+  font-size: .64rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: #0c1118;
+  background: linear-gradient(90deg, var(--ai), var(--science));
+  border-radius: 5px;
+  padding: 1px 6px;
+}
 .card-foot {
   display: flex;
   align-items: center;

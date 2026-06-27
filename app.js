@@ -63,7 +63,7 @@ function applyFilters(items) {
   return items.filter((it) => {
     if (state.country !== 'all' && it.country !== state.country) return false;
     if (q) {
-      const hay = `${it.title} ${it.snippet} ${it.source}`.toLowerCase();
+      const hay = `${it.title} ${it.translatedTitle || ''} ${it.summary || ''} ${it.snippet} ${it.source}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -76,7 +76,18 @@ function cardHTML(it) {
   const flag = state.data.countries[it.country]?.flag || '🌐';
   const color = TOPIC_COLOR[it.topic] || 'var(--accent)';
   const time = relativeTime(it.publishedAt);
-  const snippet = it.snippet ? `<p class="card-snippet">${esc(it.snippet)}</p>` : '';
+  const hasTh = !!it.translatedTitle;
+
+  const titleMain = hasTh ? it.translatedTitle : it.title;
+  const titleOrig = hasTh ? `<p class="card-title-orig">${esc(it.title)}</p>` : '';
+  const body = it.summary
+    ? `<p class="card-summary">${esc(it.summary)}</p>`
+    : (it.snippet ? `<p class="card-snippet">${esc(it.snippet)}</p>` : '');
+  const insight = it.insight
+    ? `<p class="card-insight"><span aria-hidden="true">💡</span> ${esc(it.insight)}</p>`
+    : '';
+  const aiBadge = it.summary ? `<span class="ai-badge">AI</span>` : '';
+
   return `
     <a class="card" href="${esc(it.link)}" target="_blank" rel="noopener noreferrer" style="--topic-color:${color}">
       <div class="card-meta">
@@ -84,10 +95,13 @@ function cardHTML(it) {
         <span class="card-source">${esc(it.source)}</span>
         ${time ? `<span class="dot">·</span><span>${time}</span>` : ''}
       </div>
-      <h3 class="card-title">${esc(it.title)}</h3>
-      ${snippet}
+      <h3 class="card-title">${esc(titleMain)}</h3>
+      ${titleOrig}
+      ${body}
+      ${insight}
       <div class="card-foot">
         <span class="lang-badge">${esc(it.lang)}</span>
+        ${aiBadge}
         <span class="read-more">อ่านต้นฉบับ ↗</span>
       </div>
     </a>`;
@@ -168,6 +182,14 @@ function updateHeader() {
   const failed = state.data.feedsFailed?.length || 0;
   document.getElementById('footer-meta').textContent =
     failed > 0 ? `${failed} แหล่งข่าวดึงไม่สำเร็จรอบนี้` : 'ดึงข่าวครบทุกแหล่ง';
+
+  const note = document.getElementById('footer-note');
+  if (state.data.aiEnabled) {
+    const n = state.data.aiCounts?.enriched || 0;
+    note.textContent = `แปล/สรุป/insight ด้วย AI (${state.data.aiModel || 'Gemini'}) · ${n} ข่าว`;
+  } else {
+    note.textContent = 'ดึงข่าวจากแหล่งข่าวต้นทางโดยตรง · ยังไม่เปิด AI สรุป/แปล';
+  }
 }
 
 // ---------- boot ----------
