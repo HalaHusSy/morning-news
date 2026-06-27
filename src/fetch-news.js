@@ -17,7 +17,8 @@ const OUT_DIR = join(__dirname, '..', 'data');
 const OUT_FILE = join(OUT_DIR, 'news.json');
 
 const ITEMS_PER_FEED = 12;     // cap per source so one chatty feed can't dominate
-const FEED_TIMEOUT_MS = 15000; // per-feed network timeout
+const FEED_TIMEOUT_MS = 15000; // per-feed network timeout (rss-parser's own)
+const HARD_TIMEOUT_MS = 20000; // absolute cap: abandon a feed even if its socket hangs
 const CONCURRENCY = 8;         // how many feeds to fetch at once
 
 const parser = new Parser({
@@ -69,6 +70,16 @@ function isoDate(item) {
   return Number.isNaN(t) ? null : new Date(t).toISOString();
 }
 
+// Reject a promise if it doesn't settle within ms — guards against feeds whose
+// socket hangs and never triggers rss-parser's own timeout.
+function withTimeout(promise, ms, label) {
+  let timer;
+  const guard = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`hard timeout after ${ms}ms`)), ms);
+  });
+  return Promise.race([promise, guard]).finally(() => clearTimeout(timer));
+}
+
 // Run async tasks with limited concurrency.
 async function pool(items, limit, worker) {
   const results = [];
@@ -87,7 +98,7 @@ async function pool(items, limit, worker) {
 
 async function fetchFeed(feed) {
   try {
-    const parsed = await parser.parseURL(feed.url);
+    const parsed = await withTimeout(parser.parseURL(feed.url), HARD_TIMEOUT_MS, feed.name);
     const items = (parsed.items || [])
       .slice(0, ITEMS_PER_FEED)
       .map((it) => {
@@ -175,6 +186,10 @@ async function main() {
   console.log(`Done in ${secs}s`);
   console.log(`  ${okResults.length}/${FEEDS.length} feeds ok, ${failResults.length} failed`);
   console.log(`  ${items.length} unique articles -> ${OUT_FILE}`);
+
+  // A hung feed can leave a socket open and keep the event loop alive even though
+  // our data is already written — force a clean exit so CI never stalls.
+  process.exit(0);
 }
 
 main().catch((err) => {
