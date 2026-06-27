@@ -1,0 +1,61 @@
+name: Build & deploy dashboard
+
+# Fetches fresh news and republishes the site.
+#  - daily at 23:00 UTC (06:00 Thailand time) so it's ready each morning
+#  - on every push to main
+#  - manually from the Actions tab (Run workflow)
+on:
+  schedule:
+    - cron: '0 23 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm install --no-audit --no-fund
+
+      - name: Fetch latest news
+        run: npm run fetch
+
+      - name: Assemble static site
+        run: |
+          mkdir -p _site/data
+          cp index.html app.js styles.css _site/
+          cp data/news.json _site/data/
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
