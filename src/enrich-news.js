@@ -38,6 +38,7 @@ const BACKGROUND =
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let workingModel = null;
+let lastError = null;
 
 async function callGemini(model, prompt) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
@@ -194,6 +195,7 @@ async function main() {
       console.log(`  batch ${n}: ok (${batch.length})`);
     } catch (e) {
       failed += batch.length;
+      lastError = e.message;
       console.log(`  batch ${n}: FAILED ${e.message}`);
       if (e.status === 429) {
         console.log('  quota/rate limit reached — stopping; keeping what we have.');
@@ -211,6 +213,13 @@ async function main() {
   payload.aiEnabled = withAi > 0;
   payload.aiModel = workingModel;
   payload.aiCounts = { enriched: withAi };
+  payload.aiDebug = {
+    keyPresent: !!API_KEY,
+    keyPrefix: API_KEY ? API_KEY.slice(0, 3) : null,
+    keyLen: API_KEY ? API_KEY.length : 0,
+    modelsTried: MODEL_CANDIDATES,
+    lastError,
+  };
 
   await writeFile(NEWS_FILE, JSON.stringify(payload, null, 2), 'utf8');
   console.log(
