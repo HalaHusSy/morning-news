@@ -20,18 +20,17 @@ const NEWS_FILE = join(__dirname, '..', 'data', 'news.json');
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL_CANDIDATES = [
   process.env.GEMINI_MODEL,
+  'gemini-2.5-flash-lite', // confirmed to have free-tier quota for this account
+  'gemini-2.5-flash',
   'gemini-2.0-flash-lite',
   'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-2.5-flash-lite',
-  'gemini-2.5-flash',
 ].filter(Boolean);
 const PREV_DATA_URL =
   process.env.SITE_DATA_URL || 'https://halahussy.github.io/morning-news/data/news.json';
 
 const BATCH = 12;                 // articles per API call
 const MAX_ENRICH_PER_RUN = 300;   // safety cap on new articles processed per run
-const RPM_DELAY_MS = 4500;        // ~13 req/min, under Gemini free-tier 15 RPM
+const RPM_DELAY_MS = 6500;        // ~9 req/min, gentle on free-tier rate limits
 
 const BACKGROUND =
   'ผู้อ่านเป็นคนไทยสาย tech สนใจ: (1) งานวิจัย AI/LLM, computer vision, AI agents ' +
@@ -97,7 +96,7 @@ ${BACKGROUND}
 สำหรับข่าวแต่ละชิ้นใน JSON ด้านล่าง สร้าง 3 อย่าง:
 - th_title: แปลพาดหัวเป็นภาษาไทยให้กระชับเป็นธรรมชาติ (คงศัพท์เทคนิค/ชื่อเฉพาะ/ชื่อบริษัทเป็นภาษาอังกฤษได้)
 - summary: สรุปสาระสำคัญเป็นภาษาไทย 1-2 ประโยค
-- insight: 1 ประโยคภาษาไทย บอกว่าทำไมข่าวนี้น่าสนใจหรือเกี่ยวข้องกับ background ของผู้อ่าน (so-what)
+- insight: 1 ประโยคภาษาไทย บอก so-what ว่าข่าวนี้เชื่อมกับ background ของผู้อ่านอย่างไร — ถ้าไม่เกี่ยวจริง ให้บอกตรง ๆ สั้น ๆ ว่า "ไม่เกี่ยวกับสายงานโดยตรง" ห้ามฝืนโยงให้ดูเกี่ยว
 
 ตอบกลับเป็น JSON array ที่มี id ตรงกับ input ทุกชิ้น ห้ามมีข้อความอื่นนอก JSON
 
