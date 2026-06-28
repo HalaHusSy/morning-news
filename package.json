@@ -6,6 +6,7 @@
   "scripts": {
     "fetch": "node src/fetch-news.js",
     "enrich": "node src/enrich-news.js",
+    "vault": "node src/export-obsidian.js",
     "build": "node src/fetch-news.js && node src/enrich-news.js",
     "serve": "node serve.js",
     "start": "node serve.js",
