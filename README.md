@@ -11,6 +11,15 @@
 | 🦸 Marvel / DC | คอมิก หนัง/ซีรีส์ซูเปอร์ฮีโร่ |
 | 📖 Manga / Anime | ข่าวมังงะ & อนิเมะ |
 
+หน้าเว็บมี 3 แท็บ:
+
+| แท็บ | ทำอะไร |
+|------|--------|
+| 📰 **ข่าว** | ข่าวจัดกลุ่มตามหัวข้อ กรองตามประเทศ + ค้นหา · แต่ละข่าวติดป้าย "บริษัท" ที่ถูกพูดถึง (กดเพื่อกรอง) |
+| 🏢 **บริษัท** | watchlist บริษัท AI รายประเทศ (ไทย/จีน/สหรัฐ/ญี่ปุ่น/อังกฤษ/เยอรมัน) พร้อมจำนวนข่าว + พาดหัวล่าสุด |
+| 🏆 **LLM Arena** | กระดานเปรียบเทียบโมเดล LLM ระดับ frontier (curated) + ข่าวเปิดตัวโมเดลอัตโนมัติ + ลิงก์คะแนนสด LMArena |
+| 🛠️ **เครื่องมือ** | แคตาล็อกเครื่องมือ AI สำหรับงานพัฒนา/วิจัย (avatar 3D, วิดีโอ, ภาพ, เสียง, 3D, โมเดล/API, dev tools) |
+
 > **🌐 Live:** https://halahussy.github.io/morning-news/ — อัปเดตอัตโนมัติทุกเช้า 06:00 น. (เวลาไทย)
 >
 > สถานะปัจจุบัน: **MVP — ดึงข่าว + ลิงก์ต้นฉบับ** (ยังไม่เปิด AI แปล/สรุป)
@@ -51,13 +60,22 @@ npm run dev       # ดึงข่าว + เปิดเว็บ ในค�
 ```
 NEWS/
 ├── src/
-│   ├── feeds.js        # รายการแหล่งข่าวทั้งหมด — แก้ที่นี่เพื่อเพิ่ม/ลบแหล่ง
-│   └── fetch-news.js    # ตัวดึง+รวม+จัดรูปข่าว -> data/news.json
+│   ├── feeds.js         # รายการแหล่งข่าวทั้งหมด (รวมฟีดติดตามรายบริษัทผ่าน Google News)
+│   ├── companies.js     # watchlist บริษัท + คีย์เวิร์ดสำหรับติดป้ายบริษัทให้ข่าว
+│   ├── fetch-news.js    # ตัวดึง+รวม+จัดรูปข่าว+ติดป้ายบริษัท -> data/news.json
+│   ├── tools.js         # แคตาล็อกเครื่องมือ AI (source of truth)
+│   ├── build-tools.js   # เขียน tools.js -> data/tools.json (npm run tools)
+│   ├── models.js        # กระดานโมเดล LLM frontier (curated, source of truth)
+│   ├── build-models.js  # เขียน models.js -> data/models.json (npm run models)
+│   ├── enrich-news.js   # ชั้น AI แปล/สรุป/insight (Gemini)
+│   └── export-obsidian.js # ส่งสรุปประจำวันเข้า Obsidian (npm run vault)
 ├── data/
-│   └── news.json        # ข้อมูลข่าว (ถูกสร้างโดย npm run fetch)
-├── index.html           # หน้าเว็บ
+│   ├── news.json        # ข้อมูลข่าว (สร้างโดย npm run fetch)
+│   ├── tools.json       # แคตาล็อกเครื่องมือ (สร้างโดย npm run tools)
+│   └── models.json      # กระดานโมเดล LLM (สร้างโดย npm run models)
+├── index.html           # หน้าเว็บ (แท็บ ข่าว/บริษัท/LLM Arena/เครื่องมือ)
 ├── styles.css           # ดีไซน์
-├── app.js               # ลอจิกฝั่งหน้าเว็บ (โหลด json, กรอง, แสดงผล)
+├── app.js               # ลอจิกฝั่งหน้าเว็บ (โหลด json, แท็บ, กรอง, แสดงผล)
 ├── serve.js             # static server เล็ก ๆ (ไม่มี dependency)
 └── package.json
 ```
@@ -71,9 +89,35 @@ NEWS/
 ```
 
 - `topic`: `ai` | `finance` | `science` | `comics` | `manga`
-- `country`: `th` | `cn` | `jp` | `us` | `de` | `global`
+- `country`: `th` | `cn` | `jp` | `us` | `gb` | `de` | `fr` | `global`
 
 แหล่งที่ดึงไม่สำเร็จจะถูกข้ามอัตโนมัติและรายงานใน log — ใส่เกินไว้ได้ปลอดภัย
+
+### ติดตามบริษัท (แท็บ 🏢 บริษัท)
+
+แก้ไฟล์ [`src/companies.js`](src/companies.js) — เพิ่มบริษัทที่อยากจับตา:
+
+```js
+{ key: 'nvidia', label: 'NVIDIA', country: 'us', category: 'chip', emoji: '🟩',
+  site: 'https://www.nvidia.com', keywords: ['nvidia', 'jensen huang', 'blackwell'] },
+```
+
+ข่าวจะถูกติดป้ายบริษัทอัตโนมัติเมื่อ `keywords` ปรากฏในพาดหัว/สรุป/แหล่งข่าว
+(ทำงานกับ **ทุกแหล่ง**) นอกจากนี้ NVIDIA / Anthropic / OpenAI / Google / SpaceX /
+Alibaba ยังมีฟีด Google News เฉพาะตัวใน `feeds.js` (ฟิลด์ `company`) เพื่อให้มีข่าวทุกวัน
+
+### เพิ่ม / ลบเครื่องมือ (แท็บ 🛠️ เครื่องมือ)
+
+แก้ไฟล์ [`src/tools.js`](src/tools.js) แล้วรัน `npm run tools` เพื่อสร้าง `data/tools.json` ใหม่
+
+### อัปเดตกระดานโมเดล (แท็บ 🏆 LLM Arena)
+
+กระดานโมเดลเป็นข้อมูล **curated** (เพราะคะแนน Elo สดไม่มี API ฟรีที่เสถียร — แท็บนี้จึงลิงก์
+ไปดูคะแนนสดที่ [LMArena](https://lmarena.ai/leaderboard) แทน) เมื่อมีโมเดลใหม่น่าสนใจออกมา
+แก้ [`src/models.js`](src/models.js) แล้วรัน `npm run models`
+
+ส่วน **"ข่าวเปิดตัว/เตรียมปล่อยโมเดล"** บนแท็บเดียวกัน ดึงจากฟีดข่าวรายวันอัตโนมัติ
+(กรองด้วยคำว่า launch/release/announce + ชื่อโมเดล/แล็บ) จึงสดใหม่เองแม้ไม่ได้แก้ models.js
 
 ---
 

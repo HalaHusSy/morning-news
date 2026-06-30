@@ -5,8 +5,10 @@
 //   name    : display name of the outlet
 //   url     : RSS/Atom feed URL
 //   topic   : ai | finance | science | comics | manga
-//   country : th | cn | jp | us | de | global
+//   country : th | cn | jp | us | gb | de | fr | global
 //   lang    : en | th | zh | ja | de   (original language of the feed)
+//   company : (optional) a company key from companies.js — every item from this
+//             feed is tagged with that company (used by the per-company feeds).
 //
 // Dead/blocked feeds are skipped automatically at fetch time, so it is safe
 // to keep a generous list here.
@@ -24,9 +26,18 @@ export const COUNTRIES = {
   cn:     { label: 'China',    flag: '\u{1F1E8}\u{1F1F3}' },
   jp:     { label: 'Japan',    flag: '\u{1F1EF}\u{1F1F5}' },
   us:     { label: 'USA',      flag: '\u{1F1FA}\u{1F1F8}' },
+  gb:     { label: 'UK',       flag: '\u{1F1EC}\u{1F1E7}' },
   de:     { label: 'Germany',  flag: '\u{1F1E9}\u{1F1EA}' },
+  fr:     { label: 'France',   flag: '\u{1F1EB}\u{1F1F7}' },
   global: { label: 'Global',   flag: '\u{1F310}' },
 };
+
+// Build a Google News RSS search URL for a query (English edition).
+// Used for the per-company watch feeds below.
+function googleNews(query) {
+  const q = encodeURIComponent(query);
+  return `https://news.google.com/rss/search?q=${q}&hl=en-US&gl=US&ceid=US:en`;
+}
 
 export const FEEDS = [
   // ---------- AI / Research ----------
@@ -81,4 +92,15 @@ export const FEEDS = [
   // ---------- Manga / Anime ----------
   { name: 'Anime News Network', url: 'https://www.animenewsnetwork.com/all/rss.xml', topic: 'manga', country: 'jp', lang: 'en' },
   { name: 'コミックナタリー (Comic Natalie)', url: 'https://natalie.mu/comic/feed/news', topic: 'manga', country: 'jp', lang: 'ja' },
+
+  // ---------- Per-company watch (Google News search feeds) ----------
+  // Guaranteed daily coverage for the specifically-requested companies, on top of
+  // the keyword tagging that runs across every feed above. `company` tags every
+  // item; `topic` places them in the matching section.
+  { name: 'NVIDIA · ติดตามบริษัท', url: googleNews('NVIDIA AI'),               topic: 'ai',      country: 'us', lang: 'en', company: 'nvidia' },
+  { name: 'Anthropic · ติดตามบริษัท', url: googleNews('Anthropic Claude AI'),  topic: 'ai',      country: 'us', lang: 'en', company: 'anthropic' },
+  { name: 'OpenAI · ติดตามบริษัท', url: googleNews('OpenAI'),                   topic: 'ai',      country: 'us', lang: 'en', company: 'openai' },
+  { name: 'Google DeepMind · ติดตามบริษัท', url: googleNews('Google DeepMind Gemini AI'), topic: 'ai', country: 'us', lang: 'en', company: 'google' },
+  { name: 'SpaceX · ติดตามบริษัท', url: googleNews('SpaceX'),                   topic: 'science', country: 'us', lang: 'en', company: 'spacex' },
+  { name: 'Alibaba · ติดตามบริษัท', url: googleNews('Alibaba Qwen AI'),         topic: 'finance', country: 'cn', lang: 'en', company: 'alibaba' },
 ];

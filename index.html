@@ -24,11 +24,18 @@
     </div>
   </header>
 
+  <nav class="tabs" id="tabs" aria-label="หน้า">
+    <button class="tab active" data-tab="news">📰 ข่าว</button>
+    <button class="tab" data-tab="companies">🏢 บริษัท</button>
+    <button class="tab" data-tab="arena">🏆 LLM Arena</button>
+    <button class="tab" data-tab="tools">🛠️ เครื่องมือ</button>
+  </nav>
+
   <nav class="controls">
     <div class="controls-inner">
-      <div class="chip-row" id="country-chips" aria-label="กรองตามประเทศ"></div>
+      <div class="chip-row" id="filter-row" aria-label="ตัวกรอง"></div>
       <div class="search-wrap">
-        <input id="search" type="search" placeholder="ค้นหาหัวข้อข่าว / แหล่งข่าว…" autocomplete="off" />
+        <input id="search" type="search" placeholder="ค้นหา…" autocomplete="off" />
       </div>
     </div>
   </nav>

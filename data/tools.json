@@ -1,0 +1,664 @@
+{
+  "generatedAt": "2026-06-28T07:10:49.100Z",
+  "count": 41,
+  "categories": {
+    "avatar": {
+      "label": "AI Avatar / Digital Human",
+      "emoji": "🧍",
+      "blurb": "อวาตาร์ 3D / คนเสมือนพูดได้"
+    },
+    "video": {
+      "label": "สร้างวิดีโอด้วย AI",
+      "emoji": "🎬",
+      "blurb": "text/image-to-video"
+    },
+    "image": {
+      "label": "สร้างภาพด้วย AI",
+      "emoji": "🖼️",
+      "blurb": "text-to-image, แก้ภาพ"
+    },
+    "voice": {
+      "label": "เสียง / พากย์ / TTS",
+      "emoji": "🔊",
+      "blurb": "สังเคราะห์/โคลนเสียง"
+    },
+    "world3d": {
+      "label": "3D / ฉากจำลอง",
+      "emoji": "🧊",
+      "blurb": "NeRF, Gaussian Splatting, simulation"
+    },
+    "model": {
+      "label": "โมเดล / API / Agent",
+      "emoji": "🧠",
+      "blurb": "foundation models & APIs"
+    },
+    "devtool": {
+      "label": "เครื่องมือนักพัฒนา / วิจัย",
+      "emoji": "🛠️",
+      "blurb": "frameworks, training, hosting"
+    }
+  },
+  "countries": {
+    "th": {
+      "label": "Thailand",
+      "flag": "🇹🇭"
+    },
+    "cn": {
+      "label": "China",
+      "flag": "🇨🇳"
+    },
+    "jp": {
+      "label": "Japan",
+      "flag": "🇯🇵"
+    },
+    "us": {
+      "label": "USA",
+      "flag": "🇺🇸"
+    },
+    "gb": {
+      "label": "UK",
+      "flag": "🇬🇧"
+    },
+    "de": {
+      "label": "Germany",
+      "flag": "🇩🇪"
+    },
+    "fr": {
+      "label": "France",
+      "flag": "🇫🇷"
+    },
+    "global": {
+      "label": "Global",
+      "flag": "🌐"
+    }
+  },
+  "counts": {
+    "byCategory": {
+      "avatar": 5,
+      "video": 6,
+      "image": 5,
+      "voice": 4,
+      "world3d": 5,
+      "model": 8,
+      "devtool": 8
+    }
+  },
+  "tools": [
+    {
+      "name": "NVIDIA ACE · Audio2Face",
+      "company": "NVIDIA",
+      "companyKey": "nvidia",
+      "category": "avatar",
+      "country": "us",
+      "pricing": "free",
+      "featured": true,
+      "desc": "ชุดสร้าง \"digital human\" เรียลไทม์ของ NVIDIA — Audio2Face ขยับปาก/สีหน้าจากเสียงอัตโนมัติ ทำอวาตาร์ 3D สมจริงได้ (ตัวอย่างที่ถามถึง)",
+      "tags": [
+        "3D",
+        "realtime",
+        "SDK",
+        "digital human"
+      ],
+      "link": "https://developer.nvidia.com/ace"
+    },
+    {
+      "name": "NVIDIA Omniverse Avatar",
+      "company": "NVIDIA",
+      "companyKey": "nvidia",
+      "category": "avatar",
+      "country": "us",
+      "pricing": "free",
+      "desc": "สร้าง/รันอวาตาร์เชิงโต้ตอบบนแพลตฟอร์ม Omniverse เชื่อมกับ LLM + เสียง + กราฟิก RTX",
+      "tags": [
+        "3D",
+        "omniverse",
+        "interactive"
+      ],
+      "link": "https://www.nvidia.com/en-us/omniverse/"
+    },
+    {
+      "name": "HeyGen",
+      "company": "HeyGen",
+      "category": "avatar",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สร้างวิดีโออวาตาร์พูดได้จากข้อความ + โคลนหน้า/เสียงตัวเอง เหมาะทำคลิปนำเสนองานวิจัยหลายภาษา",
+      "tags": [
+        "video",
+        "avatar",
+        "clone"
+      ],
+      "link": "https://www.heygen.com"
+    },
+    {
+      "name": "Synthesia",
+      "company": "Synthesia",
+      "companyKey": "synthesia",
+      "category": "avatar",
+      "country": "gb",
+      "pricing": "freemium",
+      "desc": "แพลตฟอร์มวิดีโออวาตาร์ระดับองค์กร รองรับ 140+ ภาษา ทำสื่อ training/อธิบายงานได้เร็ว",
+      "tags": [
+        "video",
+        "enterprise",
+        "multilingual"
+      ],
+      "link": "https://www.synthesia.io"
+    },
+    {
+      "name": "D-ID",
+      "company": "D-ID",
+      "category": "avatar",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "เปลี่ยนรูปนิ่ง/ข้อความเป็นวิดีโอใบหน้าพูดได้ (talking head) มี API ฝังในแอปได้",
+      "tags": [
+        "talking head",
+        "api"
+      ],
+      "link": "https://www.d-id.com"
+    },
+    {
+      "name": "Sora",
+      "company": "OpenAI",
+      "companyKey": "openai",
+      "category": "video",
+      "country": "us",
+      "pricing": "paid",
+      "featured": true,
+      "desc": "โมเดล text-to-video คุณภาพสูงของ OpenAI สร้างคลิปสมจริงจากคำสั่งข้อความ",
+      "tags": [
+        "text-to-video"
+      ],
+      "link": "https://openai.com/sora"
+    },
+    {
+      "name": "Runway Gen-3",
+      "company": "Runway",
+      "companyKey": "runway",
+      "category": "video",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สร้าง/แก้วิดีโอด้วย AI ระดับมือโปร มีเครื่องมือควบคุมกล้อง/โมชั่นละเอียด",
+      "tags": [
+        "text-to-video",
+        "editing"
+      ],
+      "link": "https://runwayml.com"
+    },
+    {
+      "name": "Luma Dream Machine",
+      "company": "Luma AI",
+      "category": "video",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สร้างวิดีโอจากข้อความ/ภาพ และต่อยอดงาน 3D/NeRF ได้ในตัว",
+      "tags": [
+        "text-to-video",
+        "3D"
+      ],
+      "link": "https://lumalabs.ai/dream-machine"
+    },
+    {
+      "name": "Kling AI",
+      "company": "Kuaishou",
+      "category": "video",
+      "country": "cn",
+      "pricing": "freemium",
+      "desc": "โมเดลวิดีโอจากจีน คุณภาพสูง สร้างคลิปยาว/ลื่นไหลจากข้อความหรือภาพ",
+      "tags": [
+        "text-to-video"
+      ],
+      "link": "https://klingai.com"
+    },
+    {
+      "name": "Google Veo",
+      "company": "Google DeepMind",
+      "companyKey": "deepmind",
+      "category": "video",
+      "country": "us",
+      "pricing": "paid",
+      "desc": "โมเดล text-to-video ของ Google DeepMind ใช้ผ่าน Gemini/Vertex AI",
+      "tags": [
+        "text-to-video"
+      ],
+      "link": "https://deepmind.google/technologies/veo/"
+    },
+    {
+      "name": "Pika",
+      "company": "Pika Labs",
+      "category": "video",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สร้าง/แต่งวิดีโอสั้นจากข้อความหรือภาพ ใช้ง่าย เหมาะทำตัวอย่างเร็ว ๆ",
+      "tags": [
+        "text-to-video"
+      ],
+      "link": "https://pika.art"
+    },
+    {
+      "name": "Midjourney",
+      "company": "Midjourney",
+      "category": "image",
+      "country": "us",
+      "pricing": "paid",
+      "featured": true,
+      "desc": "สร้างภาพศิลป์คุณภาพสูงผ่านเว็บ/Discord คุมสไตล์ได้ดีเยี่ยม",
+      "tags": [
+        "text-to-image"
+      ],
+      "link": "https://www.midjourney.com"
+    },
+    {
+      "name": "FLUX.1",
+      "company": "Black Forest Labs",
+      "companyKey": "blackforest",
+      "category": "image",
+      "country": "de",
+      "pricing": "open",
+      "desc": "โมเดลสร้างภาพจากเยอรมนี มีทั้งรุ่นโอเพนเวตและเชิงพาณิชย์ คุณภาพระดับท็อป",
+      "tags": [
+        "text-to-image",
+        "open weights"
+      ],
+      "link": "https://blackforestlabs.ai"
+    },
+    {
+      "name": "Stable Diffusion / SDXL",
+      "company": "Stability AI",
+      "companyKey": "stability",
+      "category": "image",
+      "country": "gb",
+      "pricing": "open",
+      "desc": "โมเดลภาพโอเพนซอร์ส รันบนเครื่องตัวเอง/ปรับแต่ง (fine-tune) ได้อิสระ",
+      "tags": [
+        "open source",
+        "self-host"
+      ],
+      "link": "https://stability.ai"
+    },
+    {
+      "name": "DALL·E 3",
+      "company": "OpenAI",
+      "companyKey": "openai",
+      "category": "image",
+      "country": "us",
+      "pricing": "paid",
+      "desc": "สร้างภาพจากข้อความ ใช้ผ่าน ChatGPT หรือ API",
+      "tags": [
+        "text-to-image",
+        "api"
+      ],
+      "link": "https://openai.com/dall-e-3"
+    },
+    {
+      "name": "Adobe Firefly",
+      "company": "Adobe",
+      "category": "image",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สร้าง/แก้ภาพเชิงพาณิชย์ ปลอดข้อกังวลลิขสิทธิ์ ฝังใน Photoshop/Illustrator",
+      "tags": [
+        "commercial-safe",
+        "editing"
+      ],
+      "link": "https://www.adobe.com/products/firefly.html"
+    },
+    {
+      "name": "ElevenLabs",
+      "company": "ElevenLabs",
+      "companyKey": "elevenlabs",
+      "category": "voice",
+      "country": "gb",
+      "pricing": "freemium",
+      "featured": true,
+      "desc": "TTS/โคลนเสียงคุณภาพสูง หลายภาษา (รวมไทย) มี API ฝังในงานได้",
+      "tags": [
+        "tts",
+        "voice clone",
+        "api"
+      ],
+      "link": "https://elevenlabs.io"
+    },
+    {
+      "name": "OpenAI TTS / Realtime",
+      "company": "OpenAI",
+      "companyKey": "openai",
+      "category": "voice",
+      "country": "us",
+      "pricing": "paid",
+      "desc": "เสียงพูดสังเคราะห์และโหมดสนทนาเรียลไทม์ผ่าน API",
+      "tags": [
+        "tts",
+        "realtime",
+        "api"
+      ],
+      "link": "https://platform.openai.com/docs/guides/text-to-speech"
+    },
+    {
+      "name": "Botnoi Voice",
+      "company": "Botnoi",
+      "companyKey": "botnoi",
+      "category": "voice",
+      "country": "th",
+      "pricing": "freemium",
+      "desc": "TTS ภาษาไทยคุณภาพดีจากทีมไทย เหมาะทำเสียงบรรยาย/ผู้ช่วย",
+      "tags": [
+        "tts",
+        "thai"
+      ],
+      "link": "https://voice.botnoi.ai"
+    },
+    {
+      "name": "Azure AI Speech",
+      "company": "Microsoft",
+      "companyKey": "microsoft",
+      "category": "voice",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "TTS/STT/แปลเสียงระดับองค์กร รองรับไทย มีเสียงธรรมชาติหลายแบบ",
+      "tags": [
+        "tts",
+        "stt",
+        "enterprise"
+      ],
+      "link": "https://azure.microsoft.com/products/ai-services/ai-speech"
+    },
+    {
+      "name": "NVIDIA Omniverse",
+      "company": "NVIDIA",
+      "companyKey": "nvidia",
+      "category": "world3d",
+      "country": "us",
+      "pricing": "free",
+      "featured": true,
+      "desc": "แพลตฟอร์มจำลองโลก 3D/ฟิสิกส์ (OpenUSD) ทำ digital twin และฝึกหุ่นยนต์/รถยนต์ได้",
+      "tags": [
+        "simulation",
+        "digital twin",
+        "USD"
+      ],
+      "link": "https://www.nvidia.com/en-us/omniverse/"
+    },
+    {
+      "name": "Luma AI (Gaussian Splatting)",
+      "company": "Luma AI",
+      "category": "world3d",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สแกนวัตถุ/ฉากจริงเป็นโมเดล 3D ด้วยมือถือ (NeRF / Gaussian Splatting)",
+      "tags": [
+        "nerf",
+        "splatting",
+        "capture"
+      ],
+      "link": "https://lumalabs.ai"
+    },
+    {
+      "name": "Meshy",
+      "company": "Meshy",
+      "category": "world3d",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "สร้างโมเดล 3D จากข้อความหรือภาพ พร้อม texture ใช้ต่อในเกม/AR ได้",
+      "tags": [
+        "text-to-3D",
+        "asset"
+      ],
+      "link": "https://www.meshy.ai"
+    },
+    {
+      "name": "Tripo3D",
+      "company": "Tripo",
+      "category": "world3d",
+      "country": "cn",
+      "pricing": "freemium",
+      "desc": "สร้างโมเดล 3D จากข้อความ/ภาพได้เร็วมาก เหมาะทำ prototype",
+      "tags": [
+        "text-to-3D"
+      ],
+      "link": "https://www.tripo3d.ai"
+    },
+    {
+      "name": "Nerfstudio",
+      "company": "open source",
+      "category": "world3d",
+      "country": "global",
+      "pricing": "open",
+      "desc": "เฟรมเวิร์กโอเพนซอร์สสำหรับงาน NeRF — ฝึก/เรนเดอร์ฉาก 3D เพื่อการวิจัย",
+      "tags": [
+        "nerf",
+        "research",
+        "open source"
+      ],
+      "link": "https://docs.nerf.studio"
+    },
+    {
+      "name": "Claude API",
+      "company": "Anthropic",
+      "companyKey": "anthropic",
+      "category": "model",
+      "country": "us",
+      "pricing": "paid",
+      "featured": true,
+      "desc": "LLM ตระกูล Claude เก่งงานเอกสารยาว/วิเคราะห์/เขียนโค้ด เหมาะช่วยงานวิจัย",
+      "tags": [
+        "llm",
+        "long context",
+        "api"
+      ],
+      "link": "https://www.anthropic.com/api"
+    },
+    {
+      "name": "Gemini API",
+      "company": "Google",
+      "companyKey": "google",
+      "category": "model",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "โมเดลของ Google มีชั้นฟรี (แดชบอร์ดนี้ใช้แปล/สรุปข่าวด้วย Gemini)",
+      "tags": [
+        "llm",
+        "multimodal",
+        "free tier"
+      ],
+      "link": "https://ai.google.dev"
+    },
+    {
+      "name": "OpenAI API (GPT)",
+      "company": "OpenAI",
+      "companyKey": "openai",
+      "category": "model",
+      "country": "us",
+      "pricing": "paid",
+      "desc": "โมเดล GPT สำหรับข้อความ/ภาพ/เสียง/agent ผ่าน API",
+      "tags": [
+        "llm",
+        "multimodal",
+        "api"
+      ],
+      "link": "https://platform.openai.com"
+    },
+    {
+      "name": "Llama",
+      "company": "Meta",
+      "companyKey": "meta",
+      "category": "model",
+      "country": "us",
+      "pricing": "open",
+      "desc": "โมเดลโอเพนเวตของ Meta รันเอง/fine-tune ได้ฟรี เป็นฐานงานวิจัยยอดนิยม",
+      "tags": [
+        "open weights",
+        "self-host"
+      ],
+      "link": "https://www.llama.com"
+    },
+    {
+      "name": "Qwen",
+      "company": "Alibaba",
+      "companyKey": "alibaba",
+      "category": "model",
+      "country": "cn",
+      "pricing": "open",
+      "desc": "ตระกูลโมเดลโอเพนของ Alibaba เก่งหลายภาษา/โค้ด/ภาพ",
+      "tags": [
+        "open weights",
+        "multilingual"
+      ],
+      "link": "https://qwenlm.github.io"
+    },
+    {
+      "name": "DeepSeek",
+      "company": "DeepSeek",
+      "companyKey": "deepseek",
+      "category": "model",
+      "country": "cn",
+      "pricing": "open",
+      "desc": "โมเดล LLM/reasoning คุ้มค่าจากจีน มีรุ่นโอเพนเวตให้รันเอง",
+      "tags": [
+        "reasoning",
+        "open weights",
+        "cost-efficient"
+      ],
+      "link": "https://www.deepseek.com"
+    },
+    {
+      "name": "Mistral",
+      "company": "Mistral AI",
+      "category": "model",
+      "country": "fr",
+      "pricing": "freemium",
+      "desc": "โมเดลจากฝรั่งเศส มีทั้งโอเพนและเชิงพาณิชย์ น้ำหนักเบารันได้คล่อง",
+      "tags": [
+        "open weights",
+        "efficient"
+      ],
+      "link": "https://mistral.ai"
+    },
+    {
+      "name": "Typhoon",
+      "company": "SCB 10X",
+      "companyKey": "scb10x",
+      "category": "model",
+      "country": "th",
+      "pricing": "freemium",
+      "desc": "LLM ภาษาไทยจาก SCB 10X เข้าใจบริบทไทยดี เหมาะงานภาษาไทยโดยเฉพาะ",
+      "tags": [
+        "thai",
+        "llm"
+      ],
+      "link": "https://opentyphoon.ai"
+    },
+    {
+      "name": "Hugging Face",
+      "company": "Hugging Face",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "freemium",
+      "featured": true,
+      "desc": "ศูนย์กลางวงการ AI: ฮับโมเดล/ดาต้าเซ็ต/Spaces + ไลบรารี transformers",
+      "tags": [
+        "models",
+        "datasets",
+        "hub"
+      ],
+      "link": "https://huggingface.co"
+    },
+    {
+      "name": "Ollama",
+      "company": "Ollama",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "free",
+      "desc": "รัน LLM โอเพนบนเครื่องตัวเองง่าย ๆ ด้วยคำสั่งเดียว เหมาะทดลองออฟไลน์",
+      "tags": [
+        "local",
+        "self-host"
+      ],
+      "link": "https://ollama.com"
+    },
+    {
+      "name": "LangChain",
+      "company": "LangChain",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "เฟรมเวิร์กต่อ LLM เป็นแอป/agent/RAG เชื่อมเครื่องมือและข้อมูลภายนอก",
+      "tags": [
+        "agents",
+        "rag",
+        "framework"
+      ],
+      "link": "https://www.langchain.com"
+    },
+    {
+      "name": "LlamaIndex",
+      "company": "LlamaIndex",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "open",
+      "desc": "เฟรมเวิร์ก RAG เชื่อมเอกสาร/ฐานข้อมูลของเราเข้ากับ LLM",
+      "tags": [
+        "rag",
+        "framework"
+      ],
+      "link": "https://www.llamaindex.ai"
+    },
+    {
+      "name": "vLLM",
+      "company": "open source",
+      "category": "devtool",
+      "country": "global",
+      "pricing": "open",
+      "desc": "เสิร์ฟ LLM ความเร็วสูง/ประหยัด VRAM สำหรับ deploy โมเดลเอง",
+      "tags": [
+        "inference",
+        "serving",
+        "open source"
+      ],
+      "link": "https://github.com/vllm-project/vllm"
+    },
+    {
+      "name": "NVIDIA NeMo",
+      "company": "NVIDIA",
+      "companyKey": "nvidia",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "open",
+      "desc": "เฟรมเวิร์กฝึก/ปรับแต่งโมเดล AI (LLM, เสียง, วิชัน) บน GPU ของ NVIDIA",
+      "tags": [
+        "training",
+        "fine-tune"
+      ],
+      "link": "https://developer.nvidia.com/nemo"
+    },
+    {
+      "name": "Google Colab",
+      "company": "Google",
+      "companyKey": "google",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "โน้ตบุ๊ก Python + GPU ฟรี สำหรับทดลองรัน/ฝึกโมเดลโดยไม่ต้องมีเครื่องแรง",
+      "tags": [
+        "notebook",
+        "gpu",
+        "free tier"
+      ],
+      "link": "https://colab.research.google.com"
+    },
+    {
+      "name": "Cursor",
+      "company": "Anysphere",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "freemium",
+      "desc": "โปรแกรมเขียนโค้ดที่มี AI ช่วยทั้งโปรเจกต์ เร่งงานพัฒนา/วิเคราะห์โค้ดวิจัย",
+      "tags": [
+        "code",
+        "ai editor"
+      ],
+      "link": "https://cursor.com"
+    }
+  ]
+}

@@ -11,6 +11,7 @@ import { writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { FEEDS, TOPICS, COUNTRIES } from './feeds.js';
+import { tagCompanies, companiesRegistry, COMPANY_CATEGORIES } from './companies.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = join(__dirname, '..', 'data');
@@ -105,6 +106,11 @@ async function fetchFeed(feed) {
         const link = (it.link || it.guid || '').trim();
         const title = stripHtml(it.title || '').trim();
         if (!link || !title) return null;
+        const snippet = snippetOf(it);
+        // Tag companies: keyword matches anywhere in title+snippet+source, plus
+        // this feed's own company (if it's a dedicated per-company feed).
+        const companies = tagCompanies(`${title} ${snippet} ${feed.name}`);
+        if (feed.company && !companies.includes(feed.company)) companies.unshift(feed.company);
         return {
           id: hashId(link),
           title,
@@ -114,7 +120,8 @@ async function fetchFeed(feed) {
           country: feed.country,
           lang: feed.lang,
           publishedAt: isoDate(it),
-          snippet: snippetOf(it),
+          snippet,
+          companies,
           // Reserved for the future AI layer — kept null for now.
           translatedTitle: null,
           summary: null,
@@ -152,12 +159,14 @@ async function main() {
     return tb - ta;
   });
 
-  // Per-topic / per-country tallies for the UI
+  // Per-topic / per-country / per-company tallies for the UI
   const byTopic = {};
   const byCountry = {};
+  const byCompany = {};
   for (const it of items) {
     byTopic[it.topic] = (byTopic[it.topic] || 0) + 1;
     byCountry[it.country] = (byCountry[it.country] || 0) + 1;
+    for (const c of it.companies || []) byCompany[c] = (byCompany[c] || 0) + 1;
   }
 
   const payload = {
@@ -168,7 +177,9 @@ async function main() {
     feedsFailed: failResults.map((r) => ({ name: r.feed.name, url: r.feed.url, error: r.error })),
     topics: TOPICS,
     countries: COUNTRIES,
-    counts: { byTopic, byCountry },
+    companies: companiesRegistry(),
+    companyCategories: COMPANY_CATEGORIES,
+    counts: { byTopic, byCountry, byCompany },
     items,
   };
 
