@@ -1,5 +1,6 @@
 // Morning News Dashboard — front-end logic.
-// Three tabs: News (topic-grouped, filterable), Companies (watchlist), Tools (catalog).
+// Tabs: News (topic-grouped, filterable), Companies (watchlist), LLM Arena,
+// Tools (catalog), Hardware (specs + prices + compare).
 
 const TOPIC_ORDER = ['ai', 'finance', 'science', 'comics', 'manga'];
 const TOPIC_COLOR = {
@@ -21,11 +22,15 @@ const state = {
   data: null,    // news.json
   tools: null,   // tools.json
   models: null,  // models.json
+  hw: null,      // hardware.json
   tab: 'news',
   country: 'all',
   company: 'all',
   toolCat: 'all',
   modelTier: 'all',
+  hwCat: 'all',
+  hwCompare: [],        // keys of items selected for comparison (same category only)
+  hwCompareView: false, // true = showing the side-by-side table
   search: '',
 };
 
@@ -304,6 +309,188 @@ function renderTools() {
   content.innerHTML = sections || `<div class="empty">ไม่พบเครื่องมือที่ตรงกับเงื่อนไข</div>`;
 }
 
+// ---------- hardware rendering ----------
+
+function baht(n) {
+  return '฿' + Number(n).toLocaleString('th-TH');
+}
+
+function hwSearchUrl(name, suffix) {
+  return `https://www.google.com/search?q=${encodeURIComponent(`${name} ${suffix}`)}`;
+}
+
+function hwItem(key) {
+  return (state.hw?.items || []).find((h) => h.key === key);
+}
+
+function hwScoreHTML(score) {
+  if (score == null) return '';
+  return `<span class="hw-score" title="คะแนนเฉลี่ยจากสื่อรีวิว (curated)">★ ${score.toFixed(1)}</span>`;
+}
+
+function hwCardHTML(h) {
+  const fields = state.hw.specFields?.[h.category] || [];
+  const chips = fields.slice(0, 4)
+    .filter((f) => h.specs?.[f.key])
+    .map((f) => `<span class="m-spec">${esc(h.specs[f.key])}</span>`)
+    .join('');
+  const thb = h.price?.thb != null ? `<span class="hw-thb">${baht(h.price.thb)}</span>` : '';
+  const usd = h.price?.usd != null ? `<span class="hw-usd">MSRP $${Number(h.price.usd).toLocaleString('en-US')}</span>` : '';
+  const star = h.featured ? `<span class="tool-star" title="ตัวเด่นของหมวด">★</span>` : '';
+  const selected = state.hwCompare.includes(h.key);
+  return `
+    <div class="hw-card${h.featured ? ' featured' : ''}${selected ? ' comparing' : ''}" data-hwkey="${h.key}">
+      <div class="tool-head">
+        <h3>${esc(h.name)} ${star}</h3>
+        ${hwScoreHTML(h.score)}
+      </div>
+      <p class="tool-company">${flagOf(h.country)} ${esc(h.brand)} · ออก ${esc(h.released || '—')}</p>
+      <div class="hw-price">${thb}${usd}</div>
+      <div class="m-specs">${chips}</div>
+      <p class="tool-desc">${esc(h.desc)}</p>
+      <div class="hw-actions">
+        <button class="hw-cmp-btn${selected ? ' on' : ''}" data-hwcmp="${h.key}">${selected ? '✓ เลือกเทียบแล้ว' : '⚖ เทียบ'}</button>
+        <a class="hw-link" href="${esc(hwSearchUrl(h.name, 'review'))}" target="_blank" rel="noopener noreferrer">🔎 รีวิว</a>
+        <a class="hw-link" href="${esc(hwSearchUrl(h.name, 'ราคา'))}" target="_blank" rel="noopener noreferrer">🛒 เช็คราคา</a>
+        <a class="hw-link" href="${esc(h.link)}" target="_blank" rel="noopener noreferrer">เว็บทางการ ↗</a>
+      </div>
+    </div>`;
+}
+
+function toggleHwCompare(key) {
+  const item = hwItem(key);
+  if (!item) return;
+  const i = state.hwCompare.indexOf(key);
+  if (i >= 0) {
+    state.hwCompare.splice(i, 1);
+  } else {
+    const first = state.hwCompare.length ? hwItem(state.hwCompare[0]) : null;
+    if (first && first.category !== item.category) {
+      // comparisons only make sense within a category — start over with the new pick
+      state.hwCompare = [key];
+    } else if (state.hwCompare.length >= 4) {
+      return; // cap at 4 columns so the table stays readable
+    } else {
+      state.hwCompare.push(key);
+    }
+  }
+  if (state.hwCompare.length < 2) state.hwCompareView = false;
+  renderActive();
+}
+
+function hwCompareBarHTML() {
+  if (!state.hwCompare.length || state.hwCompareView) return '';
+  const items = state.hwCompare.map(hwItem).filter(Boolean);
+  const cat = state.hw.categories?.[items[0]?.category];
+  const names = items.map((h) => `<span class="hw-bar-item">${esc(h.name)}</span>`).join('');
+  const hint = items.length < 2
+    ? '<span class="hw-bar-hint">เลือกอีกอย่างน้อย 1 ชิ้น (หมวดเดียวกัน) เพื่อเปรียบเทียบ</span>'
+    : `<button class="hw-go" id="hw-open-compare">เปรียบเทียบ ${items.length} ชิ้น →</button>`;
+  return `
+    <div class="hw-compare-bar">
+      <span class="hw-bar-cat">${cat ? cat.emoji + ' ' + esc(cat.label) : ''}</span>
+      ${names}
+      ${hint}
+      <button class="banner-clear" id="hw-clear-compare">✕ ล้าง</button>
+    </div>`;
+}
+
+function hwCompareTableHTML() {
+  const items = state.hwCompare.map(hwItem).filter(Boolean);
+  if (items.length < 2) return '';
+  const cat = items[0].category;
+  const fields = state.hw.specFields?.[cat] || [];
+  const catInfo = state.hw.categories?.[cat] || { label: cat, emoji: '🖥️' };
+
+  const heads = items.map((h) => `<th>${esc(h.name)}${h.featured ? ' <span class="tool-star">★</span>' : ''}</th>`).join('');
+
+  const thbVals = items.map((h) => h.price?.thb).filter((v) => v != null);
+  const minThb = thbVals.length ? Math.min(...thbVals) : null;
+
+  const row = (label, cells) => `<tr><th scope="row">${label}</th>${cells}</tr>`;
+  const rows = [];
+  rows.push(row('ราคาไทย (อ้างอิง)', items.map((h) => {
+    if (h.price?.thb == null) return '<td>—</td>';
+    const best = minThb != null && h.price.thb === minThb && thbVals.length > 1;
+    return `<td class="${best ? 'hw-best' : ''}">${baht(h.price.thb)}${best ? ' <span class="hw-best-tag">ถูกสุด</span>' : ''}</td>`;
+  }).join('')));
+  rows.push(row('MSRP (USD)', items.map((h) => `<td>${h.price?.usd != null ? '$' + Number(h.price.usd).toLocaleString('en-US') : '—'}</td>`).join('')));
+  rows.push(row('คะแนนรีวิวเฉลี่ย', items.map((h) => `<td>${h.score != null ? '★ ' + h.score.toFixed(1) + ' / 10' : '—'}</td>`).join('')));
+  rows.push(row('เปิดตัว', items.map((h) => `<td>${esc(h.released || '—')}</td>`).join('')));
+  for (const f of fields) {
+    rows.push(row(esc(f.label), items.map((h) => `<td>${esc(h.specs?.[f.key] || '—')}</td>`).join('')));
+  }
+  rows.push(row('ลิงก์', items.map((h) => `
+    <td class="hw-cell-links">
+      <a href="${esc(hwSearchUrl(h.name, 'review'))}" target="_blank" rel="noopener noreferrer">🔎 รีวิว</a>
+      <a href="${esc(hwSearchUrl(h.name, 'ราคา'))}" target="_blank" rel="noopener noreferrer">🛒 ราคา</a>
+      <a href="${esc(h.link)}" target="_blank" rel="noopener noreferrer">ทางการ ↗</a>
+    </td>`).join('')));
+
+  return `
+    <div class="filter-banner">
+      <span>เปรียบเทียบ ${catInfo.emoji} <strong>${esc(catInfo.label)}</strong> · ${items.length} ชิ้น</span>
+      <button class="banner-clear" id="hw-back">← กลับไปเลือกสินค้า</button>
+    </div>
+    <div class="hw-table-wrap">
+      <table class="hw-table">
+        <thead><tr><th></th>${heads}</tr></thead>
+        <tbody>${rows.join('')}</tbody>
+      </table>
+    </div>
+    <p class="hw-disclaimer">ราคาเป็นตัวเลขอ้างอิง (MSRP / ราคาไทยโดยประมาณ ณ วันที่อัปเดตข้อมูล) — กด 🛒 เพื่อเช็คราคาจริงวันนี้</p>`;
+}
+
+function renderHardware() {
+  const content = document.getElementById('content');
+  if (!state.hw) {
+    content.innerHTML = `<div class="empty">ยังโหลดแคตาล็อกฮาร์ดแวร์ไม่ได้<br /><br />รัน <code style="color:var(--accent)">npm run hardware</code> เพื่อสร้าง data/hardware.json</div>`;
+    return;
+  }
+
+  if (state.hwCompareView && state.hwCompare.length >= 2) {
+    content.innerHTML = hwCompareTableHTML();
+    return;
+  }
+
+  const q = state.search.trim().toLowerCase();
+  const cats = state.hw.categories || {};
+
+  const match = (h) => {
+    if (state.hwCat !== 'all' && h.category !== state.hwCat) return false;
+    if (!q) return true;
+    const specText = Object.values(h.specs || {}).join(' ');
+    return `${h.name} ${h.brand} ${h.desc} ${specText}`.toLowerCase().includes(q);
+  };
+
+  const intro = `
+    <div class="filter-banner">
+      <span>สเปค + ราคาอ้างอิง (curated — แก้ได้ใน <code>src/hardware.js</code>) · กด <strong>⚖ เทียบ</strong> 2–4 ชิ้นในหมวดเดียวกันเพื่อดูตารางเปรียบเทียบ</span>
+    </div>`;
+
+  const sections = Object.keys(cats).map((cat) => {
+    const list = state.hw.items.filter((h) => h.category === cat && match(h));
+    if (!list.length) return '';
+    const info = cats[cat];
+    const cards = list.map(hwCardHTML).join('');
+    return `
+      <section class="topic-section">
+        <div class="topic-head">
+          <span class="t-emoji">${info.emoji}</span>
+          <h2>${esc(info.label)}</h2>
+          <span class="t-blurb">${esc(info.blurb || '')}</span>
+          <span class="t-count">${list.length} รุ่น</span>
+        </div>
+        <div class="cards">${cards}</div>
+      </section>`;
+  }).join('');
+
+  content.innerHTML =
+    intro +
+    (sections || `<div class="empty">ไม่พบฮาร์ดแวร์ที่ตรงกับเงื่อนไข</div>`) +
+    hwCompareBarHTML();
+}
+
 // ---------- LLM Arena rendering ----------
 
 const RELEASE_RE = /\b(launch|launches|launched|launching|release|releases|released|unveil|unveils|unveiled|announce|announces|announced|announcing|introduc(?:e|es|ing)|debut|debuts|rolls out|now available|coming soon|ships|preview)\b/i;
@@ -453,6 +640,14 @@ function renderControls() {
     }
     row.innerHTML = chips.join('');
     search.placeholder = 'ค้นหาโมเดล…';
+  } else if (state.tab === 'hardware') {
+    const cats = state.hw?.categories || {};
+    const chips = [chip(state.hwCat === 'all', 'data-hwcat="all"', 'ทั้งหมด', state.hw?.count)];
+    for (const [k, info] of Object.entries(cats)) {
+      chips.push(chip(state.hwCat === k, `data-hwcat="${k}"`, `${info.emoji} ${esc(info.label)}`, state.hw?.counts?.byCategory?.[k]));
+    }
+    row.innerHTML = chips.join('');
+    search.placeholder = 'ค้นหาการ์ดจอ / CPU / สเปค…';
   } else {
     const cats = state.tools?.categories || {};
     const chips = [chip(state.toolCat === 'all', 'data-toolcat="all"', 'ทั้งหมด', state.tools?.count)];
@@ -471,6 +666,7 @@ function renderActive() {
   if (state.tab === 'news') renderNews();
   else if (state.tab === 'companies') renderCompanies();
   else if (state.tab === 'arena') renderArena();
+  else if (state.tab === 'hardware') renderHardware();
   else renderTools();
 }
 
@@ -525,10 +721,11 @@ async function load() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="loading">กำลังโหลด…</div>`;
   try {
-    const [newsRes, toolsRes, modelsRes] = await Promise.allSettled([
+    const [newsRes, toolsRes, modelsRes, hwRes] = await Promise.allSettled([
       fetch('./data/news.json?t=' + Date.now()),
       fetch('./data/tools.json?t=' + Date.now()),
       fetch('./data/models.json?t=' + Date.now()),
+      fetch('./data/hardware.json?t=' + Date.now()),
     ]);
     if (newsRes.status !== 'fulfilled' || !newsRes.value.ok) throw new Error('โหลดข่าวไม่ได้');
     state.data = await newsRes.value.json();
@@ -537,6 +734,9 @@ async function load() {
     }
     if (modelsRes.status === 'fulfilled' && modelsRes.value.ok) {
       state.models = await modelsRes.value.json();
+    }
+    if (hwRes.status === 'fulfilled' && hwRes.value.ok) {
+      state.hw = await hwRes.value.json();
     }
     updateHeader();
     renderActive();
@@ -563,6 +763,7 @@ document.getElementById('filter-row').addEventListener('click', (e) => {
   if (btn.dataset.country != null) state.country = btn.dataset.country;
   if (btn.dataset.toolcat != null) state.toolCat = btn.dataset.toolcat;
   if (btn.dataset.tier != null) state.modelTier = btn.dataset.tier;
+  if (btn.dataset.hwcat != null) { state.hwCat = btn.dataset.hwcat; state.hwCompareView = false; }
   renderActive();
 });
 
@@ -585,6 +786,32 @@ document.getElementById('content').addEventListener('click', (e) => {
   // clear company filter banner
   if (e.target.closest('#clear-company')) {
     state.company = 'all';
+    renderActive();
+    return;
+  }
+  // hardware: toggle an item in the compare selection
+  const cmp = e.target.closest('.hw-cmp-btn');
+  if (cmp) {
+    toggleHwCompare(cmp.dataset.hwcmp);
+    return;
+  }
+  // hardware: open the side-by-side compare table
+  if (e.target.closest('#hw-open-compare')) {
+    state.hwCompareView = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderActive();
+    return;
+  }
+  // hardware: back from the compare table to the catalog
+  if (e.target.closest('#hw-back')) {
+    state.hwCompareView = false;
+    renderActive();
+    return;
+  }
+  // hardware: clear the compare selection
+  if (e.target.closest('#hw-clear-compare')) {
+    state.hwCompare = [];
+    state.hwCompareView = false;
     renderActive();
   }
 });

@@ -19,6 +19,7 @@
 | 🏢 **บริษัท** | watchlist บริษัท AI รายประเทศ (ไทย/จีน/สหรัฐ/ญี่ปุ่น/อังกฤษ/เยอรมัน) พร้อมจำนวนข่าว + พาดหัวล่าสุด |
 | 🏆 **LLM Arena** | กระดานเปรียบเทียบโมเดล LLM ระดับ frontier (curated) + ข่าวเปิดตัวโมเดลอัตโนมัติ + ลิงก์คะแนนสด LMArena |
 | 🛠️ **เครื่องมือ** | แคตาล็อกเครื่องมือ AI สำหรับงานพัฒนา/วิจัย (avatar 3D, วิดีโอ, ภาพ, เสียง, 3D, โมเดล/API, dev tools) |
+| 🖥️ **ฮาร์ดแวร์** | แคตาล็อกการ์ดจอ / CPU / RAM / SSD / จอมอนิเตอร์ พร้อมสเปค + ราคาอ้างอิง + คะแนนรีวิว · เลือก 2–4 ชิ้นในหมวดเดียวกันเพื่อ**เปรียบเทียบสเปค/ราคาแบบตาราง** + ปุ่มลัดหารีวิว/เช็คราคาจริง |
 
 > **🌐 Live:** https://halahussy.github.io/morning-news/ — อัปเดตอัตโนมัติทุกเช้า 06:00 น. (เวลาไทย)
 >
@@ -67,12 +68,15 @@ NEWS/
 │   ├── build-tools.js   # เขียน tools.js -> data/tools.json (npm run tools)
 │   ├── models.js        # กระดานโมเดล LLM frontier (curated, source of truth)
 │   ├── build-models.js  # เขียน models.js -> data/models.json (npm run models)
+│   ├── hardware.js      # แคตาล็อกฮาร์ดแวร์ PC (curated, source of truth)
+│   ├── build-hardware.js# เขียน hardware.js -> data/hardware.json (npm run hardware)
 │   ├── enrich-news.js   # ชั้น AI แปล/สรุป/insight (Gemini)
 │   └── export-obsidian.js # ส่งสรุปประจำวันเข้า Obsidian (npm run vault)
 ├── data/
 │   ├── news.json        # ข้อมูลข่าว (สร้างโดย npm run fetch)
 │   ├── tools.json       # แคตาล็อกเครื่องมือ (สร้างโดย npm run tools)
-│   └── models.json      # กระดานโมเดล LLM (สร้างโดย npm run models)
+│   ├── models.json      # กระดานโมเดล LLM (สร้างโดย npm run models)
+│   └── hardware.json    # แคตาล็อกฮาร์ดแวร์ (สร้างโดย npm run hardware)
 ├── index.html           # หน้าเว็บ (แท็บ ข่าว/บริษัท/LLM Arena/เครื่องมือ)
 ├── styles.css           # ดีไซน์
 ├── app.js               # ลอจิกฝั่งหน้าเว็บ (โหลด json, แท็บ, กรอง, แสดงผล)
@@ -109,6 +113,17 @@ Alibaba ยังมีฟีด Google News เฉพาะตัวใน `fee
 ### เพิ่ม / ลบเครื่องมือ (แท็บ 🛠️ เครื่องมือ)
 
 แก้ไฟล์ [`src/tools.js`](src/tools.js) แล้วรัน `npm run tools` เพื่อสร้าง `data/tools.json` ใหม่
+
+### เพิ่ม / อัปเดตฮาร์ดแวร์ (แท็บ 🖥️ ฮาร์ดแวร์)
+
+แก้ไฟล์ [`src/hardware.js`](src/hardware.js) แล้วรัน `npm run hardware` เพื่อสร้าง `data/hardware.json` ใหม่
+
+- หมวด: `gpu` | `cpu` | `ram` | `ssd` | `monitor` — ฟิลด์สเปคของแต่ละหมวดกำหนดใน `HW_SPEC_FIELDS`
+- `price.usd` = MSRP เปิดตัว, `price.thb` = ราคาไทยโดยประมาณ (ราคาขยับตลอด — เป็นตัวเลข **อ้างอิง**
+  ปุ่ม 🛒 บนหน้าเว็บจะพาไปเช็คราคาจริงวันนี้, ปุ่ม 🔎 พาไปหารีวิว)
+- `score` = คะแนนเฉลี่ยจากสื่อรีวิวหลัก (ใส่เอง 0–10)
+- ฟีเจอร์ **เปรียบเทียบ**: กด ⚖ เทียบ 2–4 ชิ้นในหมวดเดียวกัน → ได้ตารางสเปค/ราคา/คะแนน
+  เคียงข้างกัน พร้อมไฮไลต์ตัวที่ราคาถูกสุด
 
 ### อัปเดตกระดานโมเดล (แท็บ 🏆 LLM Arena)
 

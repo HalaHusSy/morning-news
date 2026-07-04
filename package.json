@@ -8,11 +8,12 @@
     "enrich": "node src/enrich-news.js",
     "tools": "node src/build-tools.js",
     "models": "node src/build-models.js",
+    "hardware": "node src/build-hardware.js",
     "vault": "node src/export-obsidian.js",
-    "build": "node src/fetch-news.js && node src/enrich-news.js && node src/build-tools.js && node src/build-models.js",
+    "build": "node src/fetch-news.js && node src/enrich-news.js && node src/build-tools.js && node src/build-models.js && node src/build-hardware.js",
     "serve": "node serve.js",
     "start": "node serve.js",
-    "dev": "node src/fetch-news.js && node src/enrich-news.js && node src/build-tools.js && node src/build-models.js && node serve.js"
+    "dev": "node src/fetch-news.js && node src/enrich-news.js && node src/build-tools.js && node src/build-models.js && node src/build-hardware.js && node serve.js"
   },
   "dependencies": {
     "rss-parser": "^3.13.0"
