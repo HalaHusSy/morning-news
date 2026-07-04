@@ -57,6 +57,7 @@ jobs:
           mkdir -p _site/data
           cp index.html app.js styles.css _site/
           cp data/news.json data/tools.json data/models.json data/hardware.json _site/data/
+          cp -r assets _site/assets
           touch _site/.nojekyll
 
       - name: Configure Pages

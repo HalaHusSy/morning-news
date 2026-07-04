@@ -16,6 +16,7 @@
     "dev": "node src/fetch-news.js && node src/enrich-news.js && node src/build-tools.js && node src/build-models.js && node src/build-hardware.js && node serve.js"
   },
   "dependencies": {
-    "rss-parser": "^3.13.0"
+    "rss-parser": "^3.13.0",
+    "simple-icons": "^16.24.1"
   }
 }

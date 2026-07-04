@@ -20,10 +20,13 @@
 //   desc     : short Thai description (who it's for / why it's interesting)
 //   link     : official product page
 //   featured : true to highlight the standout pick in a category
-//   img      : (optional) URL of a real product photo. When omitted the site
-//              draws a built-in SVG illustration for the category (with the
-//              brand's accent color) so cards always have artwork and never
-//              depend on external image hosts.
+//   img      : (optional) URL of a real product photo. Easier: drop a photo
+//              file into assets/hw/<key>.<ext> and re-run `npm run hardware`
+//              — it's picked up automatically (see assets/hw/README.md).
+//              Without a photo the site draws a built-in SVG illustration
+//              (retail box + product, official brand logo, brand accent
+//              color). If a photo URL ever fails to load, the site falls
+//              back to that SVG automatically — no broken images.
 //
 // Review / price-check buttons on the site are generated automatically
 // (Google search for "<name> review" and "<name> ราคา") so links never rot.
