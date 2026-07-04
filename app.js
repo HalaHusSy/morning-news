@@ -311,6 +311,116 @@ function renderTools() {
 
 // ---------- hardware rendering ----------
 
+// Brand accent colors for the generated product illustrations.
+const HW_BRAND_COLORS = [
+  [/nvidia|geforce/i, '#9ade2e'],
+  [/amd|radeon|ryzen/i, '#ff5a5a'],
+  [/intel/i, '#55a7ff'],
+  [/samsung/i, '#6b86ff'],
+  [/corsair/i, '#ffd54d'],
+  [/g\.?skill/i, '#ff9f43'],
+  [/kingston/i, '#ff6371'],
+  [/crucial|micron/i, '#33c1ff'],
+  [/western digital|wd/i, '#f2a33c'],
+  [/alienware|dell/i, '#14c8c8'],
+  [/lg/i, '#ff5c8a'],
+  [/asus|rog/i, '#ff4d6d'],
+  [/gigabyte/i, '#ff8a00'],
+  [/aoc/i, '#ff6b6b'],
+];
+
+function hwAccent(h) {
+  for (const [re, color] of HW_BRAND_COLORS) {
+    if (re.test(`${h.brand} ${h.name}`)) return color;
+  }
+  return '#5fb6ff';
+}
+
+// Short label drawn on the illustration (model name without the brand prefix).
+function hwShortName(h) {
+  return h.name
+    .replace(/^(GeForce|Radeon|Ryzen\s+[3579]|Core\s+Ultra\s+[579]|Core|G\.Skill|Corsair|Kingston|Crucial|Samsung|WD Black|Alienware|LG UltraGear|ASUS ROG Swift|Gigabyte|AOC)\s+/i, '')
+    .replace(/\s+\d+(\.\d+)?"$/, '');
+}
+
+// Per-category SVG product illustration — self-contained, so cards always
+// have artwork with zero external requests. An item can override it with a
+// real photo via the optional `img` field in src/hardware.js.
+function hwSVG(h) {
+  const a = hwAccent(h);
+  const label = esc(hwShortName(h));
+  const open = `<svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(h.name)}">`;
+  const name = (x, y, size = 12) =>
+    `<text x="${x}" y="${y}" fill="${a}" font-family="Inter,system-ui,sans-serif" font-size="${size}" font-weight="700" text-anchor="middle">${label}</text>`;
+
+  if (h.category === 'gpu') {
+    const fan = (cx) => `
+      <circle cx="${cx}" cy="68" r="23" fill="#0e1116" stroke="#39424f"/>
+      <g stroke="#4a5462" stroke-width="3" stroke-linecap="round">
+        ${[0, 60, 120, 180, 240, 300].map((deg) =>
+          `<line x1="${cx}" y1="68" x2="${cx}" y2="50" transform="rotate(${deg} ${cx} 68)"/>`).join('')}
+      </g>
+      <circle cx="${cx}" cy="68" r="6" fill="#2a3340" stroke="${a}"/>`;
+    return `${open}
+      <rect x="10" y="34" width="8" height="72" rx="2" fill="#39424f"/>
+      <rect x="22" y="32" width="200" height="76" rx="8" fill="#1f2733" stroke="#39424f"/>
+      <rect x="22" y="32" width="200" height="7" rx="3.5" fill="${a}"/>
+      ${fan(80)} ${fan(164)}
+      <g fill="#c9a227">${[0,1,2,3,4,5,6,7,8,9].map((i) => `<rect x="${46 + i * 12}" y="110" width="8" height="7" rx="1"/>`).join('')}</g>
+      ${name(120, 24)}
+    </svg>`;
+  }
+  if (h.category === 'cpu') {
+    return `${open}
+      <rect x="70" y="22" width="100" height="100" rx="6" fill="#173021" stroke="#39424f"/>
+      <g fill="#c9a227" opacity=".7">${[0,1,2,3,4,5,6,7].map((i) => `<circle cx="${79 + i * 12}" cy="30" r="1.6"/><circle cx="${79 + i * 12}" cy="114" r="1.6"/><circle cx="78" cy="${38 + i * 10}" r="1.6"/><circle cx="162" cy="${38 + i * 10}" r="1.6"/>`).join('')}</g>
+      <rect x="88" y="40" width="64" height="64" rx="4" fill="#2a3340" stroke="${a}" stroke-width="1.5"/>
+      <rect x="96" y="48" width="48" height="48" rx="2" fill="#1f2733"/>
+      ${name(120, 76, 11)}
+    </svg>`;
+  }
+  if (h.category === 'ram') {
+    return `${open}
+      <rect x="30" y="46" width="180" height="44" rx="4" fill="#1f2733" stroke="#39424f"/>
+      <rect x="30" y="46" width="180" height="10" rx="4" fill="${a}"/>
+      <g fill="#0e1116" stroke="#39424f">${[0,1,2,3,4,5,6,7].map((i) => `<rect x="${38 + i * 21}" y="62" width="15" height="18" rx="1.5"/>`).join('')}</g>
+      <g fill="#c9a227">${[...Array(16)].map((_, i) => `<rect x="${36 + i * 10.6}" y="90" width="6.5" height="8" rx="1"/>`).join('')}</g>
+      <rect x="118" y="90" width="6" height="10" fill="#0e1116"/>
+      ${name(120, 34)}
+    </svg>`;
+  }
+  if (h.category === 'ssd') {
+    return `${open}
+      <rect x="34" y="52" width="150" height="40" rx="4" fill="#1f2733" stroke="#39424f"/>
+      <rect x="184" y="58" width="14" height="28" fill="#c9a227"/>
+      <rect x="188" y="66" width="10" height="5" fill="#0e1116"/>
+      <rect x="42" y="60" width="52" height="24" rx="2" fill="${a}" opacity=".9"/>
+      <g fill="#0e1116" stroke="#39424f">${[0,1].map((i) => `<rect x="${104 + i * 36}" y="60" width="30" height="24" rx="2"/>`).join('')}</g>
+      <circle cx="40" cy="72" r="4" fill="#0e1116" stroke="#39424f"/>
+      ${name(120, 40)}
+    </svg>`;
+  }
+  // monitor
+  return `${open}
+    <rect x="30" y="18" width="180" height="92" rx="6" fill="#0e1116" stroke="#39424f"/>
+    <rect x="36" y="24" width="168" height="80" rx="3" fill="url(#g-${h.key})"/>
+    <defs><linearGradient id="g-${h.key}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${a}" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#1f2733"/>
+    </linearGradient></defs>
+    <rect x="112" y="110" width="16" height="12" fill="#39424f"/>
+    <rect x="88" y="122" width="64" height="6" rx="3" fill="#39424f"/>
+    ${name(120, 68, 13)}
+  </svg>`;
+}
+
+function hwImageHTML(h, cls = 'hw-img') {
+  if (h.img) {
+    return `<div class="${cls}"><img src="${esc(h.img)}" alt="${esc(h.name)}" loading="lazy" /></div>`;
+  }
+  return `<div class="${cls}">${hwSVG(h)}</div>`;
+}
+
 function baht(n) {
   return '฿' + Number(n).toLocaleString('th-TH');
 }
@@ -340,6 +450,7 @@ function hwCardHTML(h) {
   const selected = state.hwCompare.includes(h.key);
   return `
     <div class="hw-card${h.featured ? ' featured' : ''}${selected ? ' comparing' : ''}" data-hwkey="${h.key}">
+      ${hwImageHTML(h)}
       <div class="tool-head">
         <h3>${esc(h.name)} ${star}</h3>
         ${hwScoreHTML(h.score)}
@@ -402,7 +513,11 @@ function hwCompareTableHTML() {
   const fields = state.hw.specFields?.[cat] || [];
   const catInfo = state.hw.categories?.[cat] || { label: cat, emoji: '🖥️' };
 
-  const heads = items.map((h) => `<th>${esc(h.name)}${h.featured ? ' <span class="tool-star">★</span>' : ''}</th>`).join('');
+  const heads = items.map((h) => `
+    <th>
+      ${hwImageHTML(h, 'hw-img hw-img-sm')}
+      ${esc(h.name)}${h.featured ? ' <span class="tool-star">★</span>' : ''}
+    </th>`).join('');
 
   const thbVals = items.map((h) => h.price?.thb).filter((v) => v != null);
   const minThb = thbVals.length ? Math.min(...thbVals) : null;

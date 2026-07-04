@@ -20,6 +20,10 @@
 //   desc     : short Thai description (who it's for / why it's interesting)
 //   link     : official product page
 //   featured : true to highlight the standout pick in a category
+//   img      : (optional) URL of a real product photo. When omitted the site
+//              draws a built-in SVG illustration for the category (with the
+//              brand's accent color) so cards always have artwork and never
+//              depend on external image hosts.
 //
 // Review / price-check buttons on the site are generated automatically
 // (Google search for "<name> review" and "<name> ราคา") so links never rot.
