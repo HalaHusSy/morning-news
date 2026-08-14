@@ -1,6 +1,7 @@
 {
-  "generatedAt": "2026-08-14T06:59:34.460Z",
-  "count": 41,
+  "generatedAt": "2026-08-14T07:18:44.559Z",
+  "catalogUpdated": "2026-08",
+  "count": 43,
   "categories": {
     "avatar": {
       "label": "AI Avatar / Digital Human",
@@ -75,12 +76,12 @@
   "counts": {
     "byCategory": {
       "avatar": 5,
-      "video": 6,
+      "video": 7,
       "image": 5,
       "voice": 4,
       "world3d": 5,
       "model": 8,
-      "devtool": 8
+      "devtool": 9
     }
   },
   "tools": [
@@ -117,16 +118,18 @@
       "link": "https://www.nvidia.com/en-us/omniverse/"
     },
     {
-      "name": "HeyGen",
+      "name": "HeyGen Avatar IV",
       "company": "HeyGen",
       "category": "avatar",
       "country": "us",
       "pricing": "freemium",
-      "desc": "สร้างวิดีโออวาตาร์พูดได้จากข้อความ + โคลนหน้า/เสียงตัวเอง เหมาะทำคลิปนำเสนองานวิจัยหลายภาษา",
+      "added": "2026-08",
+      "desc": "อวาตาร์พูดได้จากข้อความ + โคลนหน้า/เสียงตัวเอง รุ่น Avatar IV เด่นเรื่องสีหน้าละเอียดและการควบคุมท่าทาง",
       "tags": [
         "video",
         "avatar",
-        "clone"
+        "clone",
+        "micro-expression"
       ],
       "link": "https://www.heygen.com"
     },
@@ -137,11 +140,12 @@
       "category": "avatar",
       "country": "gb",
       "pricing": "freemium",
-      "desc": "แพลตฟอร์มวิดีโออวาตาร์ระดับองค์กร รองรับ 140+ ภาษา ทำสื่อ training/อธิบายงานได้เร็ว",
+      "desc": "แพลตฟอร์มวิดีโออวาตาร์ระดับองค์กร รองรับ 140+ ภาษา รุ่นใหม่ทำเต็มตัว/หลายมุมกล้องได้",
       "tags": [
         "video",
         "enterprise",
-        "multilingual"
+        "multilingual",
+        "full-body"
       ],
       "link": "https://www.synthesia.io"
     },
@@ -200,29 +204,48 @@
       "link": "https://lumalabs.ai/dream-machine"
     },
     {
-      "name": "Kling AI",
+      "name": "Kling 3.0",
       "company": "Kuaishou",
       "category": "video",
       "country": "cn",
       "pricing": "freemium",
-      "desc": "โมเดลวิดีโอจากจีน คุณภาพสูง สร้างคลิปยาว/ลื่นไหลจากข้อความหรือภาพ",
+      "added": "2026-08",
+      "desc": "โมเดลวิดีโอจากจีน คุณภาพสูงมาก สร้างคลิปยาว/ลื่นไหลจากข้อความหรือภาพ — ตามหลัง Veo แบบสูสี",
       "tags": [
         "text-to-video"
       ],
       "link": "https://klingai.com"
     },
     {
-      "name": "Google Veo",
+      "name": "Google Veo 3.1",
       "company": "Google DeepMind",
       "companyKey": "deepmind",
       "category": "video",
       "country": "us",
       "pricing": "paid",
-      "desc": "โมเดล text-to-video ของ Google DeepMind ใช้ผ่าน Gemini/Vertex AI",
+      "featured": true,
+      "added": "2026-08",
+      "desc": "ตัวนำด้าน text-to-video สมจริงในตอนนี้ ใช้ผ่าน Gemini/Vertex AI",
       "tags": [
-        "text-to-video"
+        "text-to-video",
+        "realistic"
       ],
       "link": "https://deepmind.google/technologies/veo/"
+    },
+    {
+      "name": "Digen Video Agent",
+      "company": "Digen",
+      "category": "video",
+      "country": "us",
+      "pricing": "freemium",
+      "added": "2026-08",
+      "desc": "AI agent ทำวิดีโอยาวอัตโนมัติ — เขียนสคริปต์/แบ่งฉาก/คุมให้ตัวละครหน้าเหมือนเดิมตลอด 10 นาที+",
+      "tags": [
+        "agent",
+        "long-form",
+        "consistency"
+      ],
+      "link": "https://digen.ai"
     },
     {
       "name": "Pika",
@@ -648,13 +671,32 @@
       "link": "https://colab.research.google.com"
     },
     {
-      "name": "Cursor",
+      "name": "Claude Code",
+      "company": "Anthropic",
+      "companyKey": "anthropic",
+      "category": "devtool",
+      "country": "us",
+      "pricing": "paid",
+      "featured": true,
+      "added": "2026-08",
+      "desc": "AI agent เขียนโค้ดในเทอร์มินัล/IDE — วางแผน แก้ไฟล์ รันเทส แก้บั๊กเองได้ทั้งโปรเจกต์ (แดชบอร์ดนี้สร้างด้วยตัวนี้)",
+      "tags": [
+        "agent",
+        "code",
+        "terminal"
+      ],
+      "link": "https://claude.com/claude-code"
+    },
+    {
+      "name": "Cursor 3",
       "company": "Anysphere",
       "category": "devtool",
       "country": "us",
       "pricing": "freemium",
-      "desc": "โปรแกรมเขียนโค้ดที่มี AI ช่วยทั้งโปรเจกต์ เร่งงานพัฒนา/วิเคราะห์โค้ดวิจัย",
+      "added": "2026-08",
+      "desc": "เอดิเตอร์ที่มี AI ช่วยทั้งโปรเจกต์ รุ่น 3 ทำงานแบบ agent วางแผน-เขียน-รัน-แก้เองได้",
       "tags": [
+        "agent",
         "code",
         "ai editor"
       ],

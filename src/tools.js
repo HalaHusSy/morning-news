@@ -15,6 +15,18 @@
 //   link      : official page
 //   pricing   : free | freemium | paid | open   (open = open weights/source)
 //   featured  : true to highlight (e.g. the standout pick in a category)
+//   added     : 'YYYY-MM' when this entry was added/last revised — drives the
+//               "ใหม่" badge (shown for ~4 months). Optional; omit for evergreen
+//               entries that have been in the catalog a long time.
+//
+// NOTE: this list is curated by hand, so it only changes when this file changes.
+// The Tools tab also shows a "ข่าวเครื่องมือ & ฟีเจอร์ใหม่" section that is pulled
+// automatically from the daily news feed, so the page still refreshes on its own
+// between edits to this file.
+
+// Bump when you meaningfully revise the catalog — shown on the Tools tab so it's
+// clear how current the list is (generatedAt only reflects the last deploy).
+export const CATALOG_UPDATED = '2026-08';
 
 export const TOOL_CATEGORIES = {
   avatar:  { label: 'AI Avatar / Digital Human', emoji: '\u{1F9CD}', blurb: 'อวาตาร์ 3D / คนเสมือนพูดได้' },
@@ -34,12 +46,12 @@ export const TOOLS = [
   { name: 'NVIDIA Omniverse Avatar', company: 'NVIDIA', companyKey: 'nvidia', category: 'avatar', country: 'us', pricing: 'free',
     desc: 'สร้าง/รันอวาตาร์เชิงโต้ตอบบนแพลตฟอร์ม Omniverse เชื่อมกับ LLM + เสียง + กราฟิก RTX',
     tags: ['3D', 'omniverse', 'interactive'], link: 'https://www.nvidia.com/en-us/omniverse/' },
-  { name: 'HeyGen', company: 'HeyGen', category: 'avatar', country: 'us', pricing: 'freemium',
-    desc: 'สร้างวิดีโออวาตาร์พูดได้จากข้อความ + โคลนหน้า/เสียงตัวเอง เหมาะทำคลิปนำเสนองานวิจัยหลายภาษา',
-    tags: ['video', 'avatar', 'clone'], link: 'https://www.heygen.com' },
+  { name: 'HeyGen Avatar IV', company: 'HeyGen', category: 'avatar', country: 'us', pricing: 'freemium', added: '2026-08',
+    desc: 'อวาตาร์พูดได้จากข้อความ + โคลนหน้า/เสียงตัวเอง รุ่น Avatar IV เด่นเรื่องสีหน้าละเอียดและการควบคุมท่าทาง',
+    tags: ['video', 'avatar', 'clone', 'micro-expression'], link: 'https://www.heygen.com' },
   { name: 'Synthesia', company: 'Synthesia', companyKey: 'synthesia', category: 'avatar', country: 'gb', pricing: 'freemium',
-    desc: 'แพลตฟอร์มวิดีโออวาตาร์ระดับองค์กร รองรับ 140+ ภาษา ทำสื่อ training/อธิบายงานได้เร็ว',
-    tags: ['video', 'enterprise', 'multilingual'], link: 'https://www.synthesia.io' },
+    desc: 'แพลตฟอร์มวิดีโออวาตาร์ระดับองค์กร รองรับ 140+ ภาษา รุ่นใหม่ทำเต็มตัว/หลายมุมกล้องได้',
+    tags: ['video', 'enterprise', 'multilingual', 'full-body'], link: 'https://www.synthesia.io' },
   { name: 'D-ID', company: 'D-ID', category: 'avatar', country: 'us', pricing: 'freemium',
     desc: 'เปลี่ยนรูปนิ่ง/ข้อความเป็นวิดีโอใบหน้าพูดได้ (talking head) มี API ฝังในแอปได้',
     tags: ['talking head', 'api'], link: 'https://www.d-id.com' },
@@ -54,12 +66,15 @@ export const TOOLS = [
   { name: 'Luma Dream Machine', company: 'Luma AI', category: 'video', country: 'us', pricing: 'freemium',
     desc: 'สร้างวิดีโอจากข้อความ/ภาพ และต่อยอดงาน 3D/NeRF ได้ในตัว',
     tags: ['text-to-video', '3D'], link: 'https://lumalabs.ai/dream-machine' },
-  { name: 'Kling AI', company: 'Kuaishou', category: 'video', country: 'cn', pricing: 'freemium',
-    desc: 'โมเดลวิดีโอจากจีน คุณภาพสูง สร้างคลิปยาว/ลื่นไหลจากข้อความหรือภาพ',
+  { name: 'Kling 3.0', company: 'Kuaishou', category: 'video', country: 'cn', pricing: 'freemium', added: '2026-08',
+    desc: 'โมเดลวิดีโอจากจีน คุณภาพสูงมาก สร้างคลิปยาว/ลื่นไหลจากข้อความหรือภาพ — ตามหลัง Veo แบบสูสี',
     tags: ['text-to-video'], link: 'https://klingai.com' },
-  { name: 'Google Veo', company: 'Google DeepMind', companyKey: 'deepmind', category: 'video', country: 'us', pricing: 'paid',
-    desc: 'โมเดล text-to-video ของ Google DeepMind ใช้ผ่าน Gemini/Vertex AI',
-    tags: ['text-to-video'], link: 'https://deepmind.google/technologies/veo/' },
+  { name: 'Google Veo 3.1', company: 'Google DeepMind', companyKey: 'deepmind', category: 'video', country: 'us', pricing: 'paid', featured: true, added: '2026-08',
+    desc: 'ตัวนำด้าน text-to-video สมจริงในตอนนี้ ใช้ผ่าน Gemini/Vertex AI',
+    tags: ['text-to-video', 'realistic'], link: 'https://deepmind.google/technologies/veo/' },
+  { name: 'Digen Video Agent', company: 'Digen', category: 'video', country: 'us', pricing: 'freemium', added: '2026-08',
+    desc: 'AI agent ทำวิดีโอยาวอัตโนมัติ — เขียนสคริปต์/แบ่งฉาก/คุมให้ตัวละครหน้าเหมือนเดิมตลอด 10 นาที+',
+    tags: ['agent', 'long-form', 'consistency'], link: 'https://digen.ai' },
   { name: 'Pika', company: 'Pika Labs', category: 'video', country: 'us', pricing: 'freemium',
     desc: 'สร้าง/แต่งวิดีโอสั้นจากข้อความหรือภาพ ใช้ง่าย เหมาะทำตัวอย่างเร็ว ๆ',
     tags: ['text-to-video'], link: 'https://pika.art' },
@@ -160,7 +175,10 @@ export const TOOLS = [
   { name: 'Google Colab', company: 'Google', companyKey: 'google', category: 'devtool', country: 'us', pricing: 'freemium',
     desc: 'โน้ตบุ๊ก Python + GPU ฟรี สำหรับทดลองรัน/ฝึกโมเดลโดยไม่ต้องมีเครื่องแรง',
     tags: ['notebook', 'gpu', 'free tier'], link: 'https://colab.research.google.com' },
-  { name: 'Cursor', company: 'Anysphere', category: 'devtool', country: 'us', pricing: 'freemium',
-    desc: 'โปรแกรมเขียนโค้ดที่มี AI ช่วยทั้งโปรเจกต์ เร่งงานพัฒนา/วิเคราะห์โค้ดวิจัย',
-    tags: ['code', 'ai editor'], link: 'https://cursor.com' },
+  { name: 'Claude Code', company: 'Anthropic', companyKey: 'anthropic', category: 'devtool', country: 'us', pricing: 'paid', featured: true, added: '2026-08',
+    desc: 'AI agent เขียนโค้ดในเทอร์มินัล/IDE — วางแผน แก้ไฟล์ รันเทส แก้บั๊กเองได้ทั้งโปรเจกต์ (แดชบอร์ดนี้สร้างด้วยตัวนี้)',
+    tags: ['agent', 'code', 'terminal'], link: 'https://claude.com/claude-code' },
+  { name: 'Cursor 3', company: 'Anysphere', category: 'devtool', country: 'us', pricing: 'freemium', added: '2026-08',
+    desc: 'เอดิเตอร์ที่มี AI ช่วยทั้งโปรเจกต์ รุ่น 3 ทำงานแบบ agent วางแผน-เขียน-รัน-แก้เองได้',
+    tags: ['agent', 'code', 'ai editor'], link: 'https://cursor.com' },
 ];

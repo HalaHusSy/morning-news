@@ -476,6 +476,16 @@ body {
   border-radius: 5px;
   padding: 1px 6px;
 }
+.tool-news {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  color: #0c1118;
+  background: var(--science);
+  border-radius: 5px;
+  padding: 1px 6px;
+  margin-left: 4px;
+}
 .price-badge {
   flex-shrink: 0;
   font-size: .66rem;

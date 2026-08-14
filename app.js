@@ -284,17 +284,69 @@ function renderCompanies() {
 
 // ---------- tools rendering ----------
 
+// --- tool ↔ news matching -------------------------------------------------
+// The catalog itself is hand-curated, so on its own the Tools tab would look
+// identical every day. These helpers tie it to the daily news feed: each tool
+// picks up the articles that mention it (by name, or by its maker plus a
+// tool-ish context), so the tab moves on its own between catalog edits.
+
+function toolNameRe(t) {
+  // Distinctive product names only — short/common words would match anything.
+  const names = [t.name, ...(t.aliases || [])]
+    .map((n) => n.replace(/\s+\d+(\.\d+)?$/, '')) // "Kling 3.0" -> "Kling"
+    .filter((n) => n.length >= 4);
+  if (!names.length) return null;
+  const alt = names.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  try {
+    return new RegExp(`(?<![a-z0-9])(?:${alt})(?![a-z0-9])`, 'i');
+  } catch {
+    return null;
+  }
+}
+
+let _toolNewsCache = null;
+function toolNewsIndex() {
+  if (_toolNewsCache) return _toolNewsCache;
+  const index = new Map();     // tool name -> [items]
+  const matched = new Set();   // item ids that matched any tool
+  if (!state.tools || !state.data) return (_toolNewsCache = { index, matched });
+
+  for (const t of state.tools.tools) {
+    const re = toolNameRe(t);
+    if (!re) continue;
+    const hits = [];
+    for (const it of state.data.items) {
+      const hay = `${it.title} ${it.snippet || ''}`;
+      if (re.test(hay)) {
+        hits.push(it);
+        matched.add(it.id);
+      }
+      if (hits.length >= 6) break;
+    }
+    if (hits.length) index.set(t.name, hits);
+  }
+  return (_toolNewsCache = { index, matched });
+}
+
 function toolCardHTML(t) {
   const p = PRICING[t.pricing] || { label: t.pricing || '', cls: '' };
   const tags = (t.tags || []).slice(0, 4).map((x) => `<span class="tool-tag">${esc(x)}</span>`).join('');
   const star = t.featured ? `<span class="tool-star" title="แนะนำ">★</span>` : '';
+  const news = toolNewsIndex().index.get(t.name);
+  const newsBadge = news ? `<span class="tool-news" title="มีข่าวถึงเครื่องมือนี้ในรอบนี้">📰 ${news.length}</span>` : '';
+  const isNew = (() => {
+    if (!t.added) return false;
+    const d = Date.parse(t.added + '-01');
+    return !Number.isNaN(d) && (Date.now() - d) < 130 * 86400000;
+  })();
+  const newBadge = isNew ? `<span class="m-badge new">ใหม่</span>` : '';
   return `
     <a class="tool-card${t.featured ? ' featured' : ''}" href="${esc(t.link)}" target="_blank" rel="noopener noreferrer">
       <div class="tool-head">
-        <h3>${esc(t.name)} ${star}</h3>
+        <h3>${esc(t.name)} ${star}${newBadge}</h3>
         <span class="price-badge ${p.cls}">${esc(p.label)}</span>
       </div>
-      <p class="tool-company">${flagOf(t.country)} ${esc(t.company)}</p>
+      <p class="tool-company">${flagOf(t.country)} ${esc(t.company)} ${newsBadge}</p>
       <p class="tool-desc">${esc(t.desc)}</p>
       <div class="tool-foot">
         <div class="tool-tags">${tags}</div>
@@ -312,6 +364,12 @@ function renderTools() {
   const q = state.search.trim().toLowerCase();
   const cats = state.tools.categories || {};
   const order = Object.keys(cats);
+  const updated = state.tools.catalogUpdated;
+  const intro = `
+    <div class="filter-banner arena-intro">
+      <span>แคตาล็อกคัดเอง ${state.tools.count} ตัว${updated ? ` · ปรับปรุงล่าสุด <strong>${esc(updated)}</strong>` : ''}
+      · ส่วน “ข่าวเครื่องมือ” ด้านล่างอัปเดตเองทุกวันจากฟีดข่าว</span>
+    </div>`;
 
   const match = (t) => {
     if (state.toolCat !== 'all' && t.category !== state.toolCat) return false;
@@ -338,7 +396,26 @@ function renderTools() {
       </section>`;
   }).join('');
 
-  content.innerHTML = sections || `<div class="empty">ไม่พบเครื่องมือที่ตรงกับเงื่อนไข</div>`;
+  // Auto section: today's news that mentions anything in the catalog.
+  let newsSection = '';
+  if (state.toolCat === 'all' && !q) {
+    const { matched } = toolNewsIndex();
+    const rel = state.data.items.filter((it) => matched.has(it.id)).slice(0, 12);
+    if (rel.length) {
+      newsSection = `
+        <section class="topic-section">
+          <div class="topic-head">
+            <span class="t-emoji">📰</span>
+            <h2>ข่าวเครื่องมือ &amp; ฟีเจอร์ใหม่</h2>
+            <span class="t-blurb">ดึงอัตโนมัติจากข่าววันนี้</span>
+            <span class="t-count">${rel.length} ข่าว</span>
+          </div>
+          <div class="cards">${rel.map(cardHTML).join('')}</div>
+        </section>`;
+    }
+  }
+
+  content.innerHTML = intro + (sections || `<div class="empty">ไม่พบเครื่องมือที่ตรงกับเงื่อนไข</div>`) + newsSection;
 }
 
 // ---------- LLM Arena rendering ----------
@@ -561,6 +638,7 @@ function updateHeader() {
 async function load() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="loading">กำลังโหลด…</div>`;
+  _toolNewsCache = null; // recompute tool↔news matches against the fresh data
   try {
     const [newsRes, toolsRes, modelsRes, coRes] = await Promise.allSettled([
       fetch('./data/news.json?t=' + Date.now()),

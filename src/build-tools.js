@@ -6,7 +6,7 @@
 import { writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { TOOLS, TOOL_CATEGORIES } from './tools.js';
+import { TOOLS, TOOL_CATEGORIES, CATALOG_UPDATED } from './tools.js';
 import { COUNTRIES } from './feeds.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -19,6 +19,7 @@ async function main() {
 
   const payload = {
     generatedAt: new Date().toISOString(),
+    catalogUpdated: CATALOG_UPDATED,
     count: TOOLS.length,
     categories: TOOL_CATEGORIES,
     countries: COUNTRIES,
