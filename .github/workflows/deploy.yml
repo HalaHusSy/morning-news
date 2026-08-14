@@ -46,16 +46,17 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npm run enrich
 
-      - name: Build tools catalog + LLM board
+      - name: Build tools catalog + LLM board + company registry
         run: |
           npm run tools
           npm run models
+          npm run companies
 
       - name: Assemble static site
         run: |
           mkdir -p _site/data
           cp index.html app.js styles.css _site/
-          cp data/news.json data/tools.json data/models.json _site/data/
+          cp data/news.json data/tools.json data/models.json data/companies.json _site/data/
           touch _site/.nojekyll
 
       - name: Configure Pages

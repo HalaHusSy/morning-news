@@ -21,6 +21,7 @@ const state = {
   data: null,    // news.json
   tools: null,   // tools.json
   models: null,  // models.json
+  co: null,      // companies.json (watchlist registry)
   tab: 'news',
   country: 'all',
   company: 'all',
@@ -65,7 +66,20 @@ function esc(s = '') {
 }
 
 function flagOf(country) {
-  return (state.data?.countries || state.tools?.countries || {})[country]?.flag || '🌐';
+  return (state.data?.countries || state.co?.countries || state.tools?.countries || {})[country]?.flag || '🌐';
+}
+
+// The watchlist comes from companies.json (always current — it's what we follow).
+// news.json embeds a copy too, used as a fallback so an older/newer pairing of the
+// two files still renders. Article counts always come from news.json.
+function companyRegistry() {
+  const fromFile = state.co?.companies;
+  if (fromFile && Object.keys(fromFile).length) return fromFile;
+  return state.data?.companies || {};
+}
+
+function companyCategories() {
+  return state.co?.companyCategories || state.data?.companyCategories || {};
 }
 
 // ---------- news filtering ----------
@@ -86,7 +100,7 @@ function applyNewsFilters(items) {
 // ---------- news rendering ----------
 
 function companyChipsHTML(it) {
-  const reg = state.data.companies || {};
+  const reg = companyRegistry();
   const keys = (it.companies || []).filter((k) => reg[k]).slice(0, 4);
   if (!keys.length) return '';
   const chips = keys.map((k) => {
@@ -148,7 +162,7 @@ function sectionHTML(topicKey, items) {
 
 function companyBannerHTML() {
   if (state.company === 'all') return '';
-  const c = state.data.companies?.[state.company];
+  const c = companyRegistry()[state.company];
   if (!c) return '';
   return `
     <div class="filter-banner">
@@ -179,7 +193,7 @@ function renderNews() {
 // ---------- companies rendering ----------
 
 function companyCardHTML(key, info, count, latest) {
-  const cat = state.data.companyCategories?.[info.category];
+  const cat = companyCategories()[info.category];
   const catLabel = cat ? `${cat.emoji} ${cat.label}` : info.category;
   const muted = count === 0 ? ' muted' : '';
   const head = latest
@@ -205,9 +219,29 @@ function companyCardHTML(key, info, count, latest) {
 
 function renderCompanies() {
   const content = document.getElementById('content');
-  const reg = state.data.companies || {};
+  const reg = companyRegistry();
   const counts = state.data.counts?.byCompany || {};
   const q = state.search.trim().toLowerCase();
+
+  // No watchlist at all — companies.json missing AND news.json predates tagging.
+  if (!Object.keys(reg).length) {
+    content.innerHTML = `
+      <div class="empty">
+        ยังไม่มีรายชื่อบริษัท<br /><br />
+        สร้างไฟล์ทะเบียนบริษัทด้วยคำสั่ง:<br />
+        <code style="color:var(--accent)">npm run companies</code>
+      </div>`;
+    return;
+  }
+
+  // Watchlist is fine, but the news data is too old to have company tags —
+  // say so plainly instead of showing every company with a silent 0.
+  const newsHasTags = !!state.data.counts?.byCompany;
+  const staleWarn = newsHasTags ? '' : `
+    <div class="filter-banner">
+      <span>⚠️ ข้อมูลข่าวในเครื่องเป็นเวอร์ชันเก่า (ยังไม่มีการติดป้ายบริษัท) — จำนวนข่าวจึงขึ้น 0 ทั้งหมด
+      · รัน <code>npm run fetch</code> เพื่ออัปเดต</span>
+    </div>`;
 
   // newest matching article per company, for the "ล่าสุด" preview
   const latestByCompany = {};
@@ -227,7 +261,7 @@ function renderCompanies() {
       .filter(([, info]) => info.country === country)
       .sort((a, b) => (counts[b[0]] || 0) - (counts[a[0]] || 0));
     if (!inCountry.length) return '';
-    const ci = state.data.countries[country] || { label: country, flag: '🌐' };
+    const ci = (state.data.countries || state.co?.countries || {})[country] || { label: country, flag: '🌐' };
     const total = inCountry.reduce((s, [k]) => s + (counts[k] || 0), 0);
     const cards = inCountry.map(([k, info]) => companyCardHTML(k, info, counts[k] || 0, latestByCompany[k])).join('');
     return `
@@ -242,7 +276,10 @@ function renderCompanies() {
       </section>`;
   }).join('');
 
-  content.innerHTML = sections || `<div class="empty">ไม่พบบริษัทที่ตรงกับคำค้นหา</div>`;
+  const emptyMsg = q
+    ? `<div class="empty">ไม่พบบริษัทที่ตรงกับ "${esc(state.search.trim())}"</div>`
+    : `<div class="empty">ไม่มีบริษัทให้แสดง</div>`;
+  content.innerHTML = staleWarn + (sections || emptyMsg);
 }
 
 // ---------- tools rendering ----------
@@ -325,7 +362,7 @@ function releaseNewsItems(limit = 12) {
 }
 
 function modelCardHTML(m) {
-  const reg = state.data?.companies || {};
+  const reg = companyRegistry();
   const co = m.companyKey && reg[m.companyKey] ? reg[m.companyKey] : null;
   const coEmoji = co ? co.emoji + ' ' : '';
   const accessCls = m.access === 'open' ? 'open' : 'paid';
@@ -502,7 +539,7 @@ function updateHeader() {
   const updated = gen
     ? gen.toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })
     : '—';
-  const coTracked = Object.keys(state.data.companies || {}).length;
+  const coTracked = Object.keys(companyRegistry()).length;
   document.getElementById('meta').textContent =
     `${state.data.count} ข่าว · ${state.data.feedsOk}/${state.data.feedsTotal} แหล่งข่าว · จับตา ${coTracked} บริษัท · อัปเดต ${updated}`;
 
@@ -525,10 +562,11 @@ async function load() {
   const content = document.getElementById('content');
   content.innerHTML = `<div class="loading">กำลังโหลด…</div>`;
   try {
-    const [newsRes, toolsRes, modelsRes] = await Promise.allSettled([
+    const [newsRes, toolsRes, modelsRes, coRes] = await Promise.allSettled([
       fetch('./data/news.json?t=' + Date.now()),
       fetch('./data/tools.json?t=' + Date.now()),
       fetch('./data/models.json?t=' + Date.now()),
+      fetch('./data/companies.json?t=' + Date.now()),
     ]);
     if (newsRes.status !== 'fulfilled' || !newsRes.value.ok) throw new Error('โหลดข่าวไม่ได้');
     state.data = await newsRes.value.json();
@@ -537,6 +575,9 @@ async function load() {
     }
     if (modelsRes.status === 'fulfilled' && modelsRes.value.ok) {
       state.models = await modelsRes.value.json();
+    }
+    if (coRes.status === 'fulfilled' && coRes.value.ok) {
+      state.co = await coRes.value.json();
     }
     updateHeader();
     renderActive();

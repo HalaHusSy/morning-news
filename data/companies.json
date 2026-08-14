@@ -1,0 +1,409 @@
+{
+  "generatedAt": "2026-08-14T06:59:33.821Z",
+  "count": 47,
+  "companies": {
+    "nvidia": {
+      "label": "NVIDIA",
+      "country": "us",
+      "category": "chip",
+      "emoji": "🟩",
+      "site": "https://www.nvidia.com"
+    },
+    "openai": {
+      "label": "OpenAI",
+      "country": "us",
+      "category": "lab",
+      "emoji": "🤖",
+      "site": "https://openai.com"
+    },
+    "anthropic": {
+      "label": "Anthropic",
+      "country": "us",
+      "category": "lab",
+      "emoji": "📜",
+      "site": "https://www.anthropic.com"
+    },
+    "google": {
+      "label": "Google / Alphabet",
+      "country": "us",
+      "category": "bigtech",
+      "emoji": "🔵",
+      "site": "https://ai.google"
+    },
+    "microsoft": {
+      "label": "Microsoft",
+      "country": "us",
+      "category": "bigtech",
+      "emoji": "🪟",
+      "site": "https://www.microsoft.com/ai"
+    },
+    "meta": {
+      "label": "Meta",
+      "country": "us",
+      "category": "bigtech",
+      "emoji": "♾️",
+      "site": "https://ai.meta.com"
+    },
+    "amazon": {
+      "label": "Amazon / AWS",
+      "country": "us",
+      "category": "bigtech",
+      "emoji": "📦",
+      "site": "https://aws.amazon.com/ai/"
+    },
+    "apple": {
+      "label": "Apple",
+      "country": "us",
+      "category": "bigtech",
+      "emoji": "🍎",
+      "site": "https://www.apple.com"
+    },
+    "xai": {
+      "label": "xAI",
+      "country": "us",
+      "category": "lab",
+      "emoji": "✖️",
+      "site": "https://x.ai"
+    },
+    "amd": {
+      "label": "AMD",
+      "country": "us",
+      "category": "chip",
+      "emoji": "🔴",
+      "site": "https://www.amd.com"
+    },
+    "intel": {
+      "label": "Intel",
+      "country": "us",
+      "category": "chip",
+      "emoji": "🔷",
+      "site": "https://www.intel.com"
+    },
+    "tesla": {
+      "label": "Tesla",
+      "country": "us",
+      "category": "ev",
+      "emoji": "🚗",
+      "site": "https://www.tesla.com"
+    },
+    "spacex": {
+      "label": "SpaceX",
+      "country": "us",
+      "category": "space",
+      "emoji": "🚀",
+      "site": "https://www.spacex.com"
+    },
+    "perplexity": {
+      "label": "Perplexity AI",
+      "country": "us",
+      "category": "lab",
+      "emoji": "🔎",
+      "site": "https://www.perplexity.ai"
+    },
+    "runway": {
+      "label": "Runway",
+      "country": "us",
+      "category": "creative",
+      "emoji": "🎬",
+      "site": "https://runwayml.com"
+    },
+    "alibaba": {
+      "label": "Alibaba",
+      "country": "cn",
+      "category": "bigtech",
+      "emoji": "🛒",
+      "site": "https://www.alibabacloud.com"
+    },
+    "baidu": {
+      "label": "Baidu",
+      "country": "cn",
+      "category": "bigtech",
+      "emoji": "🐾",
+      "site": "https://www.baidu.com"
+    },
+    "tencent": {
+      "label": "Tencent",
+      "country": "cn",
+      "category": "bigtech",
+      "emoji": "💬",
+      "site": "https://www.tencent.com"
+    },
+    "bytedance": {
+      "label": "ByteDance",
+      "country": "cn",
+      "category": "bigtech",
+      "emoji": "🎵",
+      "site": "https://www.bytedance.com"
+    },
+    "deepseek": {
+      "label": "DeepSeek",
+      "country": "cn",
+      "category": "lab",
+      "emoji": "🐋",
+      "site": "https://www.deepseek.com"
+    },
+    "zhipu": {
+      "label": "Zhipu AI",
+      "country": "cn",
+      "category": "lab",
+      "emoji": "🧬",
+      "site": "https://www.zhipuai.cn"
+    },
+    "moonshot": {
+      "label": "Moonshot AI (Kimi)",
+      "country": "cn",
+      "category": "lab",
+      "emoji": "🌙",
+      "site": "https://www.moonshot.cn"
+    },
+    "sensetime": {
+      "label": "SenseTime",
+      "country": "cn",
+      "category": "enterprise",
+      "emoji": "👁️",
+      "site": "https://www.sensetime.com"
+    },
+    "huawei": {
+      "label": "Huawei",
+      "country": "cn",
+      "category": "bigtech",
+      "emoji": "🌸",
+      "site": "https://www.huawei.com"
+    },
+    "sakana": {
+      "label": "Sakana AI",
+      "country": "jp",
+      "category": "lab",
+      "emoji": "🐟",
+      "site": "https://sakana.ai"
+    },
+    "preferred": {
+      "label": "Preferred Networks",
+      "country": "jp",
+      "category": "lab",
+      "emoji": "🧠",
+      "site": "https://www.preferred.jp"
+    },
+    "sony": {
+      "label": "Sony",
+      "country": "jp",
+      "category": "enterprise",
+      "emoji": "🎮",
+      "site": "https://www.sony.com"
+    },
+    "softbank": {
+      "label": "SoftBank",
+      "country": "jp",
+      "category": "enterprise",
+      "emoji": "📱",
+      "site": "https://group.softbank"
+    },
+    "rinna": {
+      "label": "rinna",
+      "country": "jp",
+      "category": "lab",
+      "emoji": "💠",
+      "site": "https://rinna.co.jp"
+    },
+    "deepmind": {
+      "label": "Google DeepMind",
+      "country": "gb",
+      "category": "lab",
+      "emoji": "🧩",
+      "site": "https://deepmind.google"
+    },
+    "stability": {
+      "label": "Stability AI",
+      "country": "gb",
+      "category": "creative",
+      "emoji": "🎨",
+      "site": "https://stability.ai"
+    },
+    "synthesia": {
+      "label": "Synthesia",
+      "country": "gb",
+      "category": "creative",
+      "emoji": "🎥",
+      "site": "https://www.synthesia.io"
+    },
+    "elevenlabs": {
+      "label": "ElevenLabs",
+      "country": "gb",
+      "category": "creative",
+      "emoji": "🔊",
+      "site": "https://elevenlabs.io"
+    },
+    "wayve": {
+      "label": "Wayve",
+      "country": "gb",
+      "category": "ev",
+      "emoji": "🚙",
+      "site": "https://wayve.ai"
+    },
+    "graphcore": {
+      "label": "Graphcore",
+      "country": "gb",
+      "category": "chip",
+      "emoji": "🟣",
+      "site": "https://www.graphcore.ai"
+    },
+    "alephalpha": {
+      "label": "Aleph Alpha",
+      "country": "de",
+      "category": "lab",
+      "emoji": "🔶",
+      "site": "https://aleph-alpha.com"
+    },
+    "deepl": {
+      "label": "DeepL",
+      "country": "de",
+      "category": "enterprise",
+      "emoji": "🌐",
+      "site": "https://www.deepl.com"
+    },
+    "blackforest": {
+      "label": "Black Forest Labs",
+      "country": "de",
+      "category": "creative",
+      "emoji": "🌲",
+      "site": "https://blackforestlabs.ai"
+    },
+    "helsing": {
+      "label": "Helsing",
+      "country": "de",
+      "category": "enterprise",
+      "emoji": "🛡️",
+      "site": "https://helsing.ai"
+    },
+    "sap": {
+      "label": "SAP",
+      "country": "de",
+      "category": "enterprise",
+      "emoji": "🟦",
+      "site": "https://www.sap.com"
+    },
+    "scb10x": {
+      "label": "SCB 10X (Typhoon)",
+      "country": "th",
+      "category": "lab",
+      "emoji": "🌪️",
+      "site": "https://www.scb10x.com"
+    },
+    "kbtg": {
+      "label": "KBTG (Kasikorn)",
+      "country": "th",
+      "category": "enterprise",
+      "emoji": "🌾",
+      "site": "https://www.kbtg.tech"
+    },
+    "ais": {
+      "label": "AIS",
+      "country": "th",
+      "category": "enterprise",
+      "emoji": "💚",
+      "site": "https://www.ais.th"
+    },
+    "botnoi": {
+      "label": "Botnoi",
+      "country": "th",
+      "category": "creative",
+      "emoji": "👾",
+      "site": "https://www.botnoigroup.com"
+    },
+    "iapp": {
+      "label": "iApp Technology",
+      "country": "th",
+      "category": "enterprise",
+      "emoji": "🟠",
+      "site": "https://iapp.co.th"
+    },
+    "visai": {
+      "label": "VISAI",
+      "country": "th",
+      "category": "enterprise",
+      "emoji": "📘",
+      "site": "https://visai.ai"
+    },
+    "amity": {
+      "label": "Amity",
+      "country": "th",
+      "category": "enterprise",
+      "emoji": "🟡",
+      "site": "https://www.amity.co"
+    }
+  },
+  "companyCategories": {
+    "chip": {
+      "label": "ชิป / ฮาร์ดแวร์ AI",
+      "emoji": "🧱"
+    },
+    "lab": {
+      "label": "แล็บวิจัย / โมเดล AI",
+      "emoji": "🧪"
+    },
+    "bigtech": {
+      "label": "บิ๊กเทค / คลาวด์",
+      "emoji": "☁️"
+    },
+    "space": {
+      "label": "อวกาศ",
+      "emoji": "🚀"
+    },
+    "ev": {
+      "label": "ยานยนต์ / หุ่นยนต์",
+      "emoji": "🤖"
+    },
+    "enterprise": {
+      "label": "AI องค์กร / อุตสาหกรรม",
+      "emoji": "🏢"
+    },
+    "creative": {
+      "label": "AI สร้างสื่อ",
+      "emoji": "🎨"
+    }
+  },
+  "countries": {
+    "th": {
+      "label": "Thailand",
+      "flag": "🇹🇭"
+    },
+    "cn": {
+      "label": "China",
+      "flag": "🇨🇳"
+    },
+    "jp": {
+      "label": "Japan",
+      "flag": "🇯🇵"
+    },
+    "us": {
+      "label": "USA",
+      "flag": "🇺🇸"
+    },
+    "gb": {
+      "label": "UK",
+      "flag": "🇬🇧"
+    },
+    "de": {
+      "label": "Germany",
+      "flag": "🇩🇪"
+    },
+    "fr": {
+      "label": "France",
+      "flag": "🇫🇷"
+    },
+    "global": {
+      "label": "Global",
+      "flag": "🌐"
+    }
+  },
+  "counts": {
+    "byCountry": {
+      "us": 15,
+      "cn": 9,
+      "jp": 5,
+      "gb": 6,
+      "de": 5,
+      "th": 7
+    }
+  }
+}
